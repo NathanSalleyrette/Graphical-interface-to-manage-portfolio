@@ -3,4 +3,7 @@ SystematicStrategies/.vs
 SystematicStrategies/obj/
 .vs
 SystematicStrategies/packages
-Console
+Console/bin
+Console/.vs
+Console/obj
+Console/packages
