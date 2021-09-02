@@ -95,8 +95,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="main\main.cs" />
-    <Compile Include="Models\abstractShareModel.cs" />
-    <Compile Include="Models\vanillaCallModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
