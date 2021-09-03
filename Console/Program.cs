@@ -15,9 +15,10 @@ namespace SystematicStrategies.main
 
         public static void Main()
         {
-            Share action = new Share("AIREBUS", "0");
-            SimulatedDataFeedProvider sdf = new SimulatedDataFeedProvider();
-            string[] ids = new string[] { "0" };
+            Share action = new Share("AC FP", "AC FP");
+            SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
+            double nbDaysPerYear = sdf.NumberOfDaysPerYear;
+            string[] ids = new string[] { "AC FP" };
             List<DataFeed> dfList = sdf.GetDataFeed(ids , new DateTime(2010, 01, 05), new DateTime(2010, 10, 30));
             
             foreach(DataFeed df in dfList)
@@ -28,24 +29,67 @@ namespace SystematicStrategies.main
                 Console.Write("\n");
             }
 
-            VanillaCall opt = new VanillaCall("VCall", action, new DateTime(2010, 10, 30), 10.5);
+            var strike = 12;
+            VanillaCall opt = new VanillaCall("VCall", action, new DateTime(2010, 10, 30), strike);
             var Pricer = new Pricer();
 
-            var V0 = 100;
-            var T0 = new DateTime(2010, 01, 05);
-            var cours0 = decimal.ToDouble(dfList[0].PriceList["0"]);  // égale à 10
-            PricingResults result0 = Pricer.Price(opt, T0, 360, cours0, 0.25);
+            var currentDate = dfList[0].Date;
 
-            var S0 = result0.Price;
-            var delta0 = result0.Deltas[0];
-
-            Console.Write(S0);
+            var cours = decimal.ToDouble(dfList[0].PriceList["AC FP"]);  // égale à 10
+            PricingResults result = Pricer.Price(opt, currentDate, (int) nbDaysPerYear, cours, 0.25);
+            
+            double V = result.Price;
+            var S = cours;
+            var delta = result.Deltas[0];
+            var investTauxSS = V - delta * S;
+            Console.Write(S);
             Console.Write("\n");
-            Console.Write(delta0);
+            Console.Write(delta);
             Console.Write("\n");
+            dfList.RemoveAt(0);
+
+            foreach (DataFeed df in dfList)
+            {
+                double dayCount = DayCount.CountBusinessDays(currentDate, df.Date);
+                double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount/nbDaysPerYear);
+                Console.Write(riskRate);
+                Console.Write("\t");
+                Console.Write(currentDate);
+                Console.Write("\t");
+                Console.Write("Cours de l'action : ");
+                Console.Write(cours);
+                Console.Write("\t");
+                Console.Write("V : ");
+                Console.Write(V);
+                Console.Write("\t");
+                Console.Write("Investissement taux SS : ");
+                Console.Write(investTauxSS);
+                Console.Write("\t");
+                Console.Write("delta : ");
+                Console.Write(delta);
+                Console.Write("\n");
 
 
+                cours = decimal.ToDouble(df.PriceList["AC FP"]);
+                result = Pricer.Price(opt, df.Date, (int) nbDaysPerYear, cours, 0.25);
+                S = cours;
+                V = investTauxSS * riskRate + delta * S;
+                currentDate = df.Date;
+                delta = result.Deltas[0];
+                investTauxSS = V - delta * S;
 
+                
+            }
+
+            var resultFinal = V - Math.Max(cours - strike, 0);
+
+            Console.WriteLine(resultFinal);
+
+            var trackingError = resultFinal / result.Price;
+
+            Console.Write("Tracking Error : ");
+            Console.Write(trackingError);
+            Console.ReadLine();
 
 
         }
