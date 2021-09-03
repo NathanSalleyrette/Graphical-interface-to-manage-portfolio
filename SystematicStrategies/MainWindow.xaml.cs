@@ -23,6 +23,7 @@ namespace SystematicStrategies
 		public MainWindow()
 		{
 			InitializeComponent();
+			this.DataContext = new MainWindowViewModel();
 		}
 	}
 }
