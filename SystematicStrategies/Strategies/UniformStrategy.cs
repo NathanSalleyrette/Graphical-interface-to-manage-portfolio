@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.Strategies
 {
-    class UniformStrategie : Strategie
+    class UniformStrategy : Strategy
     {
         public override bool Rebalencing(DateTime t)
         {

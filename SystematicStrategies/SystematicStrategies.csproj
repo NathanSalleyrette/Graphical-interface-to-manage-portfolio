@@ -100,8 +100,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Strategies\Strategie.cs" />
-    <Compile Include="Strategies\UniformStrategie.cs" />
+    <Compile Include="Controller.cs" />
+    <Compile Include="Portofolio.cs" />
+    <Compile Include="Hedges\vanillaCallHedge.cs" />
+    <Compile Include="Strategies\DeltaNeutralStrategy.cs" />
+    <Compile Include="Strategies\Strategy.cs" />
+    <Compile Include="Strategies\UniformStrategy.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
