@@ -43,7 +43,7 @@ namespace SystematicStrategies.DataManager
 
             int indexOfDate = 0;
 
-            while(indexOfDate < globalMarket.Length & globalMarket[indexOfDate].Date != end)
+            while (indexOfDate < globalMarket.Length & globalMarket[indexOfDate].Date != end)
             {
                 indexOfDate++;
             }
@@ -56,8 +56,6 @@ namespace SystematicStrategies.DataManager
             {
                 return (DataFeed[])globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays);
             }
-
-            return window;
         }
     }
 }
