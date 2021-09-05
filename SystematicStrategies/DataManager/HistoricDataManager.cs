@@ -7,11 +7,19 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.DataManager
 {
-    class HistoricDataManager : DataManager
+    class HistoricDataManager : IDataFeedProvider
     {
-        public override DataFeed[] GetDataFeeds(DateTime start, DateTime end)
+        public DateTime MinDate { get; }
+
+        public string Name { get; }
+
+        public DateTime MaxDate {get ; }
+
+        public int NumberOfDaysPerYear {get; }
+
+        public List<DataFeed> GetDataFeed(string[] ids, DateTime start, DateTime end)
         {
-            DataFeed[] globalMarket = { };
+            List<DataFeed> globalMarket = new List<DataFeed>();
 
             // Loading of the datas
             using (DataBaseAccessDataContext asdc = new DataBaseAccessDataContext())
@@ -30,14 +38,17 @@ namespace SystematicStrategies.DataManager
                         priceList.Add(line.id, line.value);
                     }
                     DataFeed market = new DataFeed(date, priceList);
-                    globalMarket.Append(market);
+                    globalMarket.Add(market);
                 }
+                
+
+                return globalMarket;
             }
-            return globalMarket;
+            
 
         }
 
-        public DataFeed[] GetWindow(int numberOfDays, DataFeed[] globalMarket, DateTime end)
+        public List<DataFeed> GetWindow(int numberOfDays, DataFeed[] globalMarket, DateTime end)
         {
             DataFeed[] window = { };
 
@@ -50,11 +61,11 @@ namespace SystematicStrategies.DataManager
 
             if (indexOfDate < numberOfDays)
             {
-                return (DataFeed[])globalMarket.Take(indexOfDate);
+                return globalMarket.Take(indexOfDate).ToList();
             }
             else
             {
-                return (DataFeed[])globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays);
+                return globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays).ToList();
             }
         }
     }
