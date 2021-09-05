@@ -43,5 +43,16 @@ namespace SystematicStrategies
             double trackingError = (portofolio.value - payoff) / strategy.optionPrice;
             Console.WriteLine(trackingError);
         }
+
+        public string ResultToString()
+        {
+            string result = "";
+            result += "Valeur du portefeuille : " + portofolio.value + "\n" 
+                + "Payoff : " + payoff + "\n"
+                + "Prix de l'option : " + strategy.optionPrice + "\n";
+            double trackingError = (portofolio.value - payoff) / strategy.optionPrice;
+            result += "TrackingError : " + trackingError;
+            return result;
+        }
     }
 }

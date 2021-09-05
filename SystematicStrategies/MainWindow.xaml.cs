@@ -26,13 +26,13 @@ namespace SystematicStrategies
 	{
 		public MainWindow()
 		{
-            Share action = new Share("AC FP", "AC FP");
-            SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
-            var strike = 12;
-            VanillaCall opt = new VanillaCall("VCall", action, new DateTime(2010, 10, 30), strike);
-			var strat = new DeltaNeutralStrategy();
-            var controller = new Controller(opt, new DateTime(2010, 01, 05), new DateTime(2010, 10, 30), sdf, strat);
-			controller.start();
+			//Share action = new Share("AC FP", "AC FP");
+			//SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
+			//var strike = 12;
+			//VanillaCall opt = new VanillaCall("VCall", action, new DateTime(2010, 10, 30), strike);
+			//var strat = new DeltaNeutralStrategy();
+			//Controller controller = new Controller(opt, new DateTime(2010, 01, 05), new DateTime(2010, 10, 30), sdf, strat);
+			//controller.start();
 			InitializeComponent();
 			this.DataContext = new MainWindowViewModel();
 		}

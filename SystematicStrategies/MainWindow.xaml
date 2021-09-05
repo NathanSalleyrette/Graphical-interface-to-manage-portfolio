@@ -22,8 +22,15 @@
 
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <DatePicker SelectedDate="2009-12-12"></DatePicker>
             <DatePicker SelectedDate="{Binding FirstDate}"></DatePicker>
-        </StackPanel> 
+            <DatePicker SelectedDate="{Binding LastDate}"></DatePicker>
+            <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
+            <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
+
+
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="530"></TextBox>
+        </StackPanel>
     </Grid>
 </Window>
