@@ -35,7 +35,14 @@ namespace SystematicStrategies.DataManager
                     Dictionary<String, decimal> priceList = new Dictionary<string, decimal>();
                     foreach (var line in marketRecup)
                     {
-                        priceList.Add(line.id, line.value);
+                        if (line.id.ElementAt(2).ToString() == " ")
+                        {
+                            priceList.Add(line.id.Substring(0, line.id.Length - 5), line.value);
+                        }
+                        else
+                        {
+                            priceList.Add(line.id.Substring(0, line.id.Length - 4), line.value);
+                        }
                     }
                     DataFeed market = new DataFeed(date, priceList);
                     globalMarket.Add(market);
