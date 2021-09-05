@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PricingLibrary.FinancialProducts;
+using PricingLibrary.Utilities.MarketDataFeed;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SystematicStrategies.Strategies;
+using static SystematicStrategies.Controller;
 
 namespace SystematicStrategies
 {
@@ -22,6 +26,13 @@ namespace SystematicStrategies
 	{
 		public MainWindow()
 		{
+            Share action = new Share("AC FP", "AC FP");
+            SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
+            var strike = 12;
+            VanillaCall opt = new VanillaCall("VCall", action, new DateTime(2010, 10, 30), strike);
+			var strat = new DeltaNeutralStrategy();
+            var controller = new Controller(opt, new DateTime(2010, 01, 05), new DateTime(2010, 10, 30), sdf, strat);
+			controller.start();
 			InitializeComponent();
 			this.DataContext = new MainWindowViewModel();
 		}

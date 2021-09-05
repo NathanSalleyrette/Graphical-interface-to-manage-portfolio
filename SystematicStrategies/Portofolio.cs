@@ -12,7 +12,7 @@ namespace SystematicStrategies
 {
     class Portofolio
     {
-        double value;
+        public double value;
         Dictionary<string, double> assetWeights;
         double investmentFreeRiskRate = 0;
 
@@ -31,6 +31,7 @@ namespace SystematicStrategies
         public void update(Option option, Strategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate)
         {
             value = investmentFreeRiskRate * riskRate;
+            Console.WriteLine(value);
             foreach (var asset in assetWeights.Keys)
             {
                 value += assetWeights[asset] * (double)dataFeed.PriceList[asset];

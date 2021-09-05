@@ -3,9 +3,6 @@ using PricingLibrary.Utilities;
 using PricingLibrary.Utilities.MarketDataFeed;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies
@@ -17,6 +14,7 @@ namespace SystematicStrategies
         Strategy strategy;
         Portofolio portofolio;
         IDataFeedProvider dataFeedProvider;
+        double payoff;
 
         public Controller(Option option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, Strategy strategy)
         {
@@ -35,7 +33,15 @@ namespace SystematicStrategies
                 double dayCount = DayCount.CountBusinessDays(lastUpdate, dataFeed.Date);
                 double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount / dataFeedProvider.NumberOfDaysPerYear);
                 portofolio.update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate);
+                lastUpdate = dataFeed.Date;
+                payoff = optionToHedge.GetPayoff(dataFeed.PriceList);
+
             }
+            Console.WriteLine(portofolio.value);
+            Console.WriteLine(payoff);
+            Console.WriteLine(strategy.optionPrice);
+            double trackingError = (portofolio.value - payoff) / strategy.optionPrice;
+            Console.WriteLine(trackingError);
         }
     }
 }

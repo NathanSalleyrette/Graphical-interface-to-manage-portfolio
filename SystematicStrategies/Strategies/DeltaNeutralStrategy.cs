@@ -12,6 +12,19 @@ namespace SystematicStrategies.Strategies
 {
     class DeltaNeutralStrategy : Strategy
     {
+        private double optionP;
+        public override double optionPrice
+        {
+            get
+            {
+                return optionP;
+            }
+            set
+            {
+                optionP = value;
+            }
+        }
+
         public override bool Rebalencing(DateTime t)
         {
             return t.DayOfWeek == DayOfWeek.Monday;
@@ -26,6 +39,7 @@ namespace SystematicStrategies.Strategies
             var S = decimal.ToDouble(market.PriceList[UnderlyingShareId]);
             PricingResults pricingResults = Pricer.Price((VanillaCall) option, market.Date, NumberOfDaysPerYear, S, volatility);
             double delta = pricingResults.Deltas[0];
+            optionP = pricingResults.Price;
             Dictionary<string, double> res = new Dictionary<string, double>();
             res.Add(UnderlyingShareId, delta);
             return res;
