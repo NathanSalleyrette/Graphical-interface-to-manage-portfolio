@@ -15,14 +15,22 @@ namespace SystematicStrategies
         Portofolio portofolio;
         IDataFeedProvider dataFeedProvider;
         double payoff;
-        List<double> optionPrices;
-        List<double> portfolioValues;
+        public List<double> optionPrices;
+        public List<double> portfolioValues;
+        public string[] dateLabels;
 
         public Controller(Option option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, Strategy strategy)
         {
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option;
             dataFeedList = dataFeedProvider.GetDataFeed(option.UnderlyingShareIds, startDate, endDate);
+            dateLabels = new string[dataFeedList.Count];
+            var i = 0;
+            foreach(var dataFeed in dataFeedList)
+            {
+                dateLabels[i] = dataFeed.Date.ToString();
+                i += 1;
+            }
             optionPrices = new List<double>() { };
             portfolioValues = new List<double>() { };
             this.strategy = strategy;

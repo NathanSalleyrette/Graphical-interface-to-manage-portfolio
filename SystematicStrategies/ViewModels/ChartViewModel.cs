@@ -1,4 +1,5 @@
 ﻿using LiveCharts;
+using LiveCharts.Wpf;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -49,5 +50,34 @@ namespace SystematicStrategies.ViewModels
             }
         }
 
+        public void reset()
+        {
+            foreach(var collection in SeriesCollection)
+            {
+                SeriesCollection.Remove(collection);
+            }
+            Labels = new string[] { };
+            YFormatter = null;
+        }
+
+        public void maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
+        {
+            Labels = dateLabels;
+            SeriesCollection = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Title = "Series 1",
+                    Values = new ChartValues<double>(optionPrices)
+               
+                },
+                new LineSeries
+                {
+                    Title = "Series 2",
+                    Values = new ChartValues<double>(portfolioValues),
+                    PointGeometry = null
+                }
+            };
+        }
     }
 }
