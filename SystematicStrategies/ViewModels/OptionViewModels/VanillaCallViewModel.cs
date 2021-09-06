@@ -26,5 +26,11 @@ namespace SystematicStrategies.ViewModels.DataViewModels
         {
             get { return "VanillaCall"; }
         }
+
+        public void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike)
+        {
+            option = new VanillaCall(nom, actions.First(), LastDate, strike);
+        }
+
     }
 }

@@ -26,5 +26,11 @@ namespace SystematicStrategies.ViewModels.DataViewModels
         {
             get { return "BasketOption"; }
         }
+
+        public void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike)
+        {
+            option = new BasketOption(nom, actions, weight, LastDate, strike);
+        }
+
     }
 }

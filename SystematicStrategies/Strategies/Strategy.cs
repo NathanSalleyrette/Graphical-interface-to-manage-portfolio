@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.Strategies
 {
-    internal abstract class Strategy
+    internal interface Strategy
     {
-        public abstract double optionPrice { get; set; }
-        abstract public bool Rebalencing(DateTime t);
+        double optionPrice { get; set; }
+        bool Rebalencing(DateTime t);
         //abstract public Dictionary<string, double> UpdateCompo(DateTime t, double value, DataFeed market);
-        abstract public Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear);
+        Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear);
 
     }
 }

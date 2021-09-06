@@ -17,5 +17,8 @@ namespace SystematicStrategies.ViewModels.DataViewModels
         string Name { get; }
 
         #endregion Public Properties
+
+        void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike);
+
     }
 }

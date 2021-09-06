@@ -68,11 +68,7 @@ namespace SystematicStrategies
             }
         }
 
-        public ChartViewModel ChartVM
-        {
-            get;
-
-        }
+        public ChartViewModel ChartVM { get; }
 
         public string Result
         {
@@ -123,25 +119,31 @@ namespace SystematicStrategies
         {
             Share action = new Share("AC FP", "AC FP");
             Share action1 = new Share("ACA FP", "ACA FP");
-            var strike = 8;
-            //VanillaCall opt = new VanillaCall("VCall", action, LastDate, strike);
-            Share[] underlyingShares = new Share[2] { action, action1 };
-            double[] weights = new double[2] { 0.25, 0.75 };
+            double strike = 8;
+            //Share[] underlyingShares = new Share[2] { action, action1 };
+            //double[] weights = new double[2] { 0.25, 0.75 };
 
-            BasketOption opt = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
-            var strat = new DeltaNeutralStrategy();
-            controller = new Controller(opt, FirstDate, LastDate, dataVM.DataFeedProvider, strat);
+            Share[] underlyingShares = new Share[1] { action};
+            double[] weights = new double[1] { 1 };
+
+
+            VanillaCall optcall = new VanillaCall("VCall", action, LastDate, strike);
+            BasketOption optbasket = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
+
+        
+            var strat = new VanillaNeutralStrategy();
+            controller = new Controller(optcall, FirstDate, LastDate, dataVM.DataFeedProvider, strat);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();
             Result += "\n" + "Date du début : " + FirstDate.ToString();
             Result += "\n" + "Date de fin : " + LastDate.ToString();
-            //ChartVM.reset();
             ChartVM.maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
         }
 
         private void ResetController()
         {
+            ChartVM.reset();
             ControllerStarted = false;
             Result = "Résultat en attente";
         }
