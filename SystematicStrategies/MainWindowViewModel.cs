@@ -130,6 +130,7 @@ namespace SystematicStrategies
 
             BasketOption opt = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
             var strat = new DeltaNeutralStrategy();
+
             controller = new Controller(opt, FirstDate, LastDate, dataVM.DataFeedProvider, strat);
             controller.start();
             ControllerStarted = true;
