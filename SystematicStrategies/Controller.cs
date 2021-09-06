@@ -3,27 +3,29 @@ using PricingLibrary.Utilities;
 using PricingLibrary.Utilities.MarketDataFeed;
 using System;
 using System.Collections.Generic;
+using SystematicStrategies.Models.OptionModel;
+using SystematicStrategies.Portfolio;
 using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies
 {
     class Controller
     {
-        Option optionToHedge;
+        IOption optionToHedge;
         List<DataFeed> dataFeedList;
         IStrategy strategy;
-        Portofolio portofolio;
+        AbstractPortfolio portfolio;
         IDataFeedProvider dataFeedProvider;
         double payoff;
         public List<double> optionPrices;
         public List<double> portfolioValues;
         public string[] dateLabels;
 
-        public Controller(Option option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, IStrategy strategy)
+        public Controller(IOptionModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider)
         {
             this.dataFeedProvider = dataFeedProvider;
-            optionToHedge = option;
-            dataFeedList = dataFeedProvider.GetDataFeed(option.UnderlyingShareIds, startDate, endDate);
+            optionToHedge = option.Option;
+            dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
             dateLabels = new string[dataFeedList.Count];
             var i = 0;
             foreach(var dataFeed in dataFeedList)
@@ -33,10 +35,11 @@ namespace SystematicStrategies
             }
             optionPrices = new List<double>() { };
             portfolioValues = new List<double>() { };
-            this.strategy = strategy;
-            portofolio = new Portofolio(optionToHedge, this.strategy, dataFeedList[0], dataFeedList, dataFeedProvider.NumberOfDaysPerYear);
+            this.strategy = option.Strategy;
+            this.portfolio = option.Portfolio;
+            portfolio.Initialize(optionToHedge, this.strategy, dataFeedList[0], dataFeedList, dataFeedProvider.NumberOfDaysPerYear);
             optionPrices.Add(this.strategy.optionPrice);
-            portfolioValues.Add(portofolio.value);
+            portfolioValues.Add(portfolio.value);
         }
         public void start()
         {
@@ -45,27 +48,27 @@ namespace SystematicStrategies
             {
                 double dayCount = DayCount.CountBusinessDays(lastUpdate, dataFeed.Date);
                 double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount / dataFeedProvider.NumberOfDaysPerYear);
-                portofolio.update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate);
+                portfolio.Update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate);
                 lastUpdate = dataFeed.Date;
                 payoff = optionToHedge.GetPayoff(dataFeed.PriceList);
                 optionPrices.Add(strategy.optionPrice);
-                portfolioValues.Add(portofolio.value);
+                portfolioValues.Add(portfolio.value);
             }
-            Console.WriteLine(portofolio.value);
+            Console.WriteLine(portfolio.value);
             Console.WriteLine(payoff);
             Console.WriteLine(strategy.optionPrice);
             Console.WriteLine(optionPrices[0]);
-            double trackingError = (portofolio.value - payoff) / optionPrices[0];
+            double trackingError = (portfolio.value - payoff) / optionPrices[0];
             Console.WriteLine(trackingError);
         }
 
         public string ResultToString()
         {
             string result = "";
-            result += "Valeur du portefeuille : " + portofolio.value + "\n" 
+            result += "Valeur du portefeuille : " + portfolio.value + "\n" 
                 + "Payoff : " + payoff + "\n"
                 + "Prix de l'option : " + strategy.optionPrice + "\n";
-            double trackingError = (portofolio.value - payoff) / optionPrices[0];
+            double trackingError = (portfolio.value - payoff) / optionPrices[0];
             result += "TrackingError : " + trackingError;
             return result;
         }

@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Portfolio;
 using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies.Models.OptionModel
 {
-    class IOptionModel
+    internal interface IOptionModel
     {
         #region Public Properties
 
@@ -16,7 +17,7 @@ namespace SystematicStrategies.Models.OptionModel
 
         IStrategy Strategy { get; }
 
-        IPortfolio Portfolio { get; }
+        AbstractPortfolio Portfolio { get; }
 
         #endregion Public Properties
     }

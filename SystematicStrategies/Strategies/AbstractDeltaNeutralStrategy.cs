@@ -30,7 +30,7 @@ namespace SystematicStrategies.Strategies
             return t.DayOfWeek == DayOfWeek.Monday;
         }
 
-        public abstract Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear);
+        public abstract Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear);
         //{
         //    //var volatility = !(dataFeedList is HistoricDataFeedProvider) ? 0.25 : null;
         //    Dictionary<string, double> res = new Dictionary<string, double>();
@@ -73,4 +73,6 @@ namespace SystematicStrategies.Strategies
         //    return res;
         //}
     }
+
+
 }

@@ -12,7 +12,7 @@ namespace SystematicStrategies.Strategies
     internal class BasketNeutralStrategy : AbstractDeltaNeutralStrategy
     {
 
-        public override Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
+        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
         {
             //var volatility = !(dataFeedList is HistoricDataFeedProvider) ? 0.25 : null;
             Dictionary<string, double> res = new Dictionary<string, double>();

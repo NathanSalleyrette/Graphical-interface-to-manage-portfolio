@@ -4,24 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Portfolio;
+using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies.Models.OptionModel
 {
-    class BasketModel : IOptionModel
+    internal class BasketModel : IOptionModel
     {
         private BasketOption option;
         private BasketNeutralStrategy strategy;
-        private BasketPortfolio portfolio;
+        private PortfolioBasket portfolio;
 
         public IOption Option => option;
         public IStrategy Strategy => strategy;
-        public IPortfolio Portfolio => portfolio;
+        public AbstractPortfolio Portfolio => portfolio;
 
         public BasketModel(string name, Share[] underlyingShares, double[] weights, DateTime maturity, double strike)
         {
             option = new BasketOption(name, underlyingShares, weights, maturity, strike);
             strategy = new BasketNeutralStrategy();
-            portfolio = new BasketPortfolio();
+            portfolio = new PortfolioBasket();
         }
     }
 }

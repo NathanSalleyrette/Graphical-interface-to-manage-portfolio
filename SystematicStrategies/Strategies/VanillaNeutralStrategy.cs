@@ -17,7 +17,7 @@ namespace SystematicStrategies.Strategies
             
         }
 
-        public override Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
+        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
         {
             Dictionary<string, double> res = new Dictionary<string, double>();
             var Pricer = new Pricer();
@@ -33,5 +33,6 @@ namespace SystematicStrategies.Strategies
 
         }
 
+  
     }
 }
