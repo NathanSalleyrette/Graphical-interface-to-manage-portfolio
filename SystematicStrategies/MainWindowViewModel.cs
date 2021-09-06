@@ -24,6 +24,7 @@ namespace SystematicStrategies
         private bool controllerStarted;
         private string _result = "Résultat en attente";
         private IDataViewModel dataVM;
+        private IOptionViewModel optionVM;
         public MainWindowViewModel()
         {
             //FirstDate = new DatePicker();
@@ -34,11 +35,16 @@ namespace SystematicStrategies
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
             var dataService = new DataService();
             AvailableDataFeedProvider = dataService.GetAvailableDataFeedProvider();
+            var optionService = new OptionService();
+            AvailableOptions = optionService.GetAvailableOptions();
+            optionVM = AvailableOptions.First();
             dataVM = AvailableDataFeedProvider.First();
             ChartVM = new ChartViewModel();
         }
 
         public List<IDataViewModel> AvailableDataFeedProvider { get; }
+
+        public List<IOptionViewModel> AvailableOptions { get; }
 
         public DateTime FirstDate { get; set; }
 
@@ -50,6 +56,15 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref dataVM, value);
+            }
+        }
+
+        public IOptionViewModel OptionVM
+        {
+            get { return optionVM; }
+            set
+            {
+                SetProperty(ref optionVM, value);
             }
         }
 
@@ -108,15 +123,14 @@ namespace SystematicStrategies
         {
             Share action = new Share("AC FP", "AC FP");
             Share action1 = new Share("ACA FP", "ACA FP");
-            SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
-            var strike = 10;
-            VanillaCall opt = new VanillaCall("VCall", action, LastDate, strike);
+            var strike = 8;
+            //VanillaCall opt = new VanillaCall("VCall", action, LastDate, strike);
             Share[] underlyingShares = new Share[2] { action, action1 };
             double[] weights = new double[2] { 0.25, 0.75 };
 
-            //BasketOption opt = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
+            BasketOption opt = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
             var strat = new DeltaNeutralStrategy();
-            controller = new Controller(opt, FirstDate, LastDate, sdf, strat);
+            controller = new Controller(opt, FirstDate, LastDate, dataVM.DataFeedProvider, strat);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();

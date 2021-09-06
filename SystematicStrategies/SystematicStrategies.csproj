@@ -120,6 +120,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Portofolio.cs" />
+    <Compile Include="Services\OptionService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Strategies\DeltaNeutralStrategy.cs" />
     <Compile Include="Strategies\Strategy.cs" />
@@ -129,6 +130,9 @@
     <Compile Include="ViewModels\DataViewModels\SimulatedDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\SemiHistoricDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\IDataViewModel.cs" />
+    <Compile Include="ViewModels\OptionViewModels\BasketViewModel.cs" />
+    <Compile Include="ViewModels\OptionViewModels\VanillaCallViewModel.cs" />
+    <Compile Include="ViewModels\OptionViewModels\IOptionViewModel.cs" />
     <Compile Include="Views\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
