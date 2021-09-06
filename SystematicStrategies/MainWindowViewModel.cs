@@ -83,9 +83,9 @@ namespace SystematicStrategies
                 {
                     SetProperty(ref _result, value);
                 }
-                
+
             }
-               
+
         }
 
         //public event PropertyChangedEventHandler PropertyChanged;
@@ -101,7 +101,7 @@ namespace SystematicStrategies
         public DelegateCommand StartCommand { get; private set; }
 
         public DelegateCommand ResetCommand { get; private set; }
-        
+
         public bool ControllerStarted
         {
             get { return controllerStarted; }
@@ -113,7 +113,7 @@ namespace SystematicStrategies
             }
         }
 
-        
+
 
         private void StartController()
         {
@@ -130,7 +130,7 @@ namespace SystematicStrategies
             VanillaCall optcall = new VanillaCall("VCall", action, LastDate, strike);
             BasketOption optbasket = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
 
-        
+
             var strat = new VanillaNeutralStrategy();
             controller = new Controller(optcall, FirstDate, LastDate, dataVM.DataFeedProvider, strat);
             controller.start();

@@ -118,6 +118,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controller.cs" />
+    <Compile Include="Estimator\Estimator.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Models\ChartSpot.cs" />
     <Compile Include="Portofolio.cs" />
