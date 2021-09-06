@@ -136,7 +136,7 @@ namespace SystematicStrategies
             Result = controller.ResultToString();
             Result += "\n" + "Date du début : " + FirstDate.ToString();
             Result += "\n" + "Date de fin : " + LastDate.ToString();
-            ChartVM.reset();
+            //ChartVM.reset();
             ChartVM.maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
         }
 

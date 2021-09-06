@@ -119,6 +119,7 @@
     </ApplicationDefinition>
     <Compile Include="Controller.cs" />
     <Compile Include="Models\Chart.cs" />
+    <Compile Include="Models\ChartSpot.cs" />
     <Compile Include="Portofolio.cs" />
     <Compile Include="Services\OptionService.cs" />
     <Compile Include="Services\DataService.cs" />

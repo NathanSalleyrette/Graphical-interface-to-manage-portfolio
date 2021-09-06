@@ -17,7 +17,7 @@ namespace SystematicStrategies.ViewModels
         private Func<double, string> yFormatter;
         public ChartViewModel()
         {
-            var underlyingChart = new Chart();
+            var underlyingChart = new ChartSpot();
             seriesCollection = underlyingChart.SeriesCollection;
             labels = underlyingChart.Labels;
             yFormatter = underlyingChart.YFormatter;
@@ -60,6 +60,8 @@ namespace SystematicStrategies.ViewModels
             YFormatter = null;
         }
 
+ 
+
         public void maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
         {
             Labels = dateLabels;
@@ -67,13 +69,13 @@ namespace SystematicStrategies.ViewModels
             {
                 new LineSeries
                 {
-                    Title = "Series 1",
+                    Title = "Option",
                     Values = new ChartValues<double>(optionPrices)
-               
+
                 },
                 new LineSeries
                 {
-                    Title = "Series 2",
+                    Title = "Portfolio",
                     Values = new ChartValues<double>(portfolioValues),
                     PointGeometry = null
                 }
