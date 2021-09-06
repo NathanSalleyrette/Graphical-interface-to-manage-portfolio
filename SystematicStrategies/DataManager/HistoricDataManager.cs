@@ -15,7 +15,7 @@ namespace SystematicStrategies.DataManager
 
         public DateTime MaxDate {get ; }
 
-        public int NumberOfDaysPerYear {get; }
+        public int NumberOfDaysPerYear => 252;
 
         public List<DataFeed> GetDataFeed(string[] ids, DateTime start, DateTime end)
         {

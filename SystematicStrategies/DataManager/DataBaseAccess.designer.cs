@@ -39,7 +39,7 @@ namespace SystematicStrategies.DataManager
     #endregion
 		
 		public DataBaseAccessDataContext() : 
-				base(global::SystematicStrategies.Properties.Settings.Default.DotNetDBConnectionString1, mappingSource)
+				base(global::SystematicStrategies.Properties.Settings.Default.DotNetDBConnectionString, mappingSource)
 		{
 			OnCreated();
 		}

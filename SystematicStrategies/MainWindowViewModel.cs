@@ -107,9 +107,14 @@ namespace SystematicStrategies
         private void StartController()
         {
             Share action = new Share("AC FP", "AC FP");
+            Share action1 = new Share("ACA FP", "ACA FP");
             SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
-            var strike = 12;
+            var strike = 10;
             VanillaCall opt = new VanillaCall("VCall", action, LastDate, strike);
+            Share[] underlyingShares = new Share[2] { action, action1 };
+            double[] weights = new double[2] { 0.25, 0.75 };
+
+            //BasketOption opt = new BasketOption("BasketOPT", underlyingShares, weights, LastDate, strike);
             var strat = new DeltaNeutralStrategy();
             controller = new Controller(opt, FirstDate, LastDate, sdf, strat);
             controller.start();

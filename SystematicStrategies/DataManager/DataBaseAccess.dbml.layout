@@ -2,16 +2,16 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DataBaseAccess">
   <DataContextMoniker Name="/DataBaseAccessDataContext" />
   <nestedChildShapes>
-    <classShape Id="bd03c16d-dacd-4d8d-a580-15d84b0c40f1" absoluteBounds="4.25, 1.125, 2, 1.3862939453125">
+    <classShape Id="00a90e49-0f90-4850-b3fb-2b88a82b21bc" absoluteBounds="0.75, 0.75, 2, 1.3862939453125">
       <DataClassMoniker Name="/DataBaseAccessDataContext/HistoricalShareValues" />
       <nestedChildShapes>
-        <elementListCompartment Id="2e56be50-c548-4d9e-bba3-9af8100fd84e" absoluteBounds="4.265, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="1837d332-285d-4f99-8aee-60150327331b" absoluteBounds="0.765, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="810f9e71-e5d3-40ca-b5a9-516ea971ae66" absoluteBounds="3.625, 3, 2, 1.1939925130208333">
+    <classShape Id="0f053c59-98fd-4485-a08e-0023303aef44" absoluteBounds="3.75, 0.75, 2, 1.1939925130208335">
       <DataClassMoniker Name="/DataBaseAccessDataContext/ShareNames" />
       <nestedChildShapes>
-        <elementListCompartment Id="2f3e8658-c2fe-438b-84b8-83b2f6d3c614" absoluteBounds="3.64, 3.46, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="681829ae-894d-4dfc-9e31-bd8e27edb430" absoluteBounds="3.765, 1.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
