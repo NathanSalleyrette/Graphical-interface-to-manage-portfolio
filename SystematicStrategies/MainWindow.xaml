@@ -4,14 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SystematicStrategies" d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
+        xmlns:views="clr-namespace:SystematicStrategies.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <DataTemplate x:Key="SelectionViewTemplate">
+            <views:SelectionView />
+        </DataTemplate>
+        <DataTemplate x:Key="ChartViewTemplate">
+            <views:ChartView />
+        </DataTemplate>
+    </Window.Resources>
     <Grid Margin="10">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="10*" />
-            <RowDefinition Height="1*" />
 
         </Grid.RowDefinitions>
 
@@ -26,11 +35,15 @@
             <DatePicker SelectedDate="{Binding LastDate}"></DatePicker>
             <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
             <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
-
+            <ContentControl ContentTemplate="{StaticResource SelectionViewTemplate}" Content="{Binding}" />
 
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Width="530"></TextBox>
+            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay}" Width="530"></TextBox>
         </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <ContentControl ContentTemplate="{StaticResource ChartViewTemplate}" Content="{Binding ChartVM}" />
+        </StackPanel>
+
     </Grid>
 </Window>

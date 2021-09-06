@@ -11,6 +11,10 @@ using PricingLibrary.Utilities.MarketDataFeed;
 using SystematicStrategies.Strategies;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using SystematicStrategies.ViewModels.DataViewModels;
+using SystematicStrategies.Services;
+using SystematicStrategies.Models;
+using SystematicStrategies.ViewModels;
 
 namespace SystematicStrategies
 {
@@ -19,6 +23,7 @@ namespace SystematicStrategies
         private Controller controller;
         private bool controllerStarted;
         private string _result = "Résultat en attente";
+        private IDataViewModel dataVM;
         public MainWindowViewModel()
         {
             //FirstDate = new DatePicker();
@@ -27,12 +32,32 @@ namespace SystematicStrategies
             LastDate = new DateTime(2010, 10, 30);
             StartCommand = new DelegateCommand(StartController, CanStartController);
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
-
+            var dataService = new DataService();
+            AvailableDataFeedProvider = dataService.GetAvailableDataFeedProvider();
+            dataVM = AvailableDataFeedProvider.First();
+            ChartVM = new ChartViewModel();
         }
+
+        public List<IDataViewModel> AvailableDataFeedProvider { get; }
 
         public DateTime FirstDate { get; set; }
 
         public DateTime LastDate { get; set; }
+
+        public IDataViewModel DataVM
+        {
+            get { return dataVM; }
+            set
+            {
+                SetProperty(ref dataVM, value);
+            }
+        }
+
+        public ChartViewModel ChartVM
+        {
+            get;
+
+        }
 
         public string Result
         {
