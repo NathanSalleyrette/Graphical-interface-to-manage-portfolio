@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.Strategies
 {
-    internal class BasketNeutralStrategy : IDeltaNeutralStrategy
+    internal class BasketNeutralStrategy : AbstractDeltaNeutralStrategy
     {
 
         public override Dictionary<string, double> UpdateCompo(Option option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)

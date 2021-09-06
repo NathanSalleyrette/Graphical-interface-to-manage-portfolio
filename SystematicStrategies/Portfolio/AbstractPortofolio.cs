@@ -8,15 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using SystematicStrategies.Strategies;
 
-namespace SystematicStrategies
+namespace SystematicStrategies.Portfolio
 {
-    class Portofolio
+    abstract class AbstractPortofolio
     {
         public double value;
         Dictionary<string, double> assetWeights;
         double investmentFreeRiskRate = 0;
 
-        public Portofolio(Option option, Strategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear)
+        public AbstractPortofolio(Option option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear)
         {
             Pricer pricer = new Pricer();
             if (option is VanillaCall)
@@ -49,7 +49,7 @@ namespace SystematicStrategies
             Console.WriteLine(value);
 
         }
-        public void update(Option option, Strategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate)
+        public void update(Option option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate)
         {
             
             value = investmentFreeRiskRate * riskRate;

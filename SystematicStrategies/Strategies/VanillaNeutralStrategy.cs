@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.Strategies
 {
-    internal class VanillaNeutralStrategy : IDeltaNeutralStrategy
+    internal class VanillaNeutralStrategy : AbstractDeltaNeutralStrategy
     {
 
         public VanillaNeutralStrategy()

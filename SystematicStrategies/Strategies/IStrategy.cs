@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SystematicStrategies.Strategies
 {
-    internal interface Strategy
+    internal interface IStrategy
     {
         double optionPrice { get; set; }
         bool Rebalencing(DateTime t);

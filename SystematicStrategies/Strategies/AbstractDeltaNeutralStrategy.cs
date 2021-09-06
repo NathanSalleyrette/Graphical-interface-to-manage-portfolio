@@ -10,7 +10,7 @@ using PricingLibrary.Utilities;
 
 namespace SystematicStrategies.Strategies
 {
-    internal abstract class IDeltaNeutralStrategy : Strategy
+    internal abstract class AbstractDeltaNeutralStrategy : IStrategy
     {
         protected double optionP;
         public double optionPrice

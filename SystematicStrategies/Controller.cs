@@ -11,7 +11,7 @@ namespace SystematicStrategies
     {
         Option optionToHedge;
         List<DataFeed> dataFeedList;
-        Strategy strategy;
+        IStrategy strategy;
         Portofolio portofolio;
         IDataFeedProvider dataFeedProvider;
         double payoff;
@@ -19,7 +19,7 @@ namespace SystematicStrategies
         public List<double> portfolioValues;
         public string[] dateLabels;
 
-        public Controller(Option option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, Strategy strategy)
+        public Controller(Option option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, IStrategy strategy)
         {
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option;
