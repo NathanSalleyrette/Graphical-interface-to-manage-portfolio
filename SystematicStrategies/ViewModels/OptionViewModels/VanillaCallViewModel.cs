@@ -16,9 +16,9 @@ namespace SystematicStrategies.ViewModels.DataViewModels
         private VanillaNeutralStrategy strategy;
         private PortfolioVanilla portfolio;
 
-        public VanillaCallViewModel(string name, Share share, DateTime maturity, double strike)
+        public VanillaCallViewModel(string name, Share[] underlyingShares, double[] weights, DateTime maturity, double strike)
         {
-            option = new VanillaCall(name, share, maturity, strike);
+            option = new VanillaCall(name, underlyingShares[0], maturity, strike);
             strategy = new VanillaNeutralStrategy();
             portfolio = new PortfolioVanilla();
         }

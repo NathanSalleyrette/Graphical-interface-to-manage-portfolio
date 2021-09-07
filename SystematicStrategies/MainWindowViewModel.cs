@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,9 @@ using SystematicStrategies.ViewModels.DataViewModels;
 using SystematicStrategies.Services;
 using SystematicStrategies.Models;
 using SystematicStrategies.ViewModels;
+using Newtonsoft.Json.Linq;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace SystematicStrategies
 {
@@ -25,27 +29,45 @@ namespace SystematicStrategies
         private string _result = "Résultat en attente";
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
+        private Config config = null;
         public MainWindowViewModel()
         {
             //FirstDate = new DatePicker();
             //FirstDate.SelectedDate = new DateTime(2009, 12, 12);
-            FirstDate = new DateTime(2009, 12, 12);
-            LastDate = new DateTime(2010, 10, 30);
             StartCommand = new DelegateCommand(StartController, CanStartController);
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
             var dataService = new DataService();
-            AvailableDataFeedProvider = dataService.GetAvailableDataFeedProvider();
-            dataVM = AvailableDataFeedProvider.First();
+            var AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
+            AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
             ChartVM = new ChartViewModel();
+            dataVM = AvailableDataFeedProvider.First();
+            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "SystematicStrategies/Configs/config.json");
+            string text = System.IO.File.ReadAllText(startupPath);
+            Console.WriteLine(text);
+            config = JsonConvert.DeserializeObject<Config>(text);
+
+            dataVM = AvailableDataFeedProviderDic[config.dataType];
         }
 
         public List<IDataViewModel> AvailableDataFeedProvider { get; }
 
         public List<IOptionViewModel> AvailableOptions { get; }
 
-        public DateTime FirstDate { get; set; }
+        public DateTime FirstDate { 
+            get { return config.startDate; }
+            set
+            {
+                SetProperty(ref config.startDate, value);
+            }
+        }
 
-        public DateTime LastDate { get; set; }
+        public DateTime LastDate { 
+            get { return config.maturity; }
+            set
+            {
+                SetProperty(ref config.maturity, value);
+            }
+        }
 
         public IDataViewModel DataVM
         {
@@ -114,23 +136,9 @@ namespace SystematicStrategies
 
         private void StartController()
         {
-            Share action = new Share("AC FP", "AC FP");
-            Share action1 = new Share("ACA FP", "ACA FP");
-            double strike = 8;
-            //Share[] underlyingShares = new Share[2] { action, action1 };
-            //double[] weights = new double[2] { 0.25, 0.75 };
-
-            Share[] underlyingShares = new Share[1] { action};
-            double[] weights = new double[1] { 1 };
-
-
-            //VanillaCallModel optcall = new VanillaCallModel("VCall", action, LastDate, strike);
-            //BasketModel optbasket = new BasketModel("BasketOPT", underlyingShares, weights, LastDate, strike);
-
-            optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
-            //optionVM = new VanillaCallViewModel("VCakk", underlyingShares[0], LastDate, strike);
-
-            //var strat = new VanillaNeutralStrategy();
+            var assembly = Assembly.GetExecutingAssembly();
+            var type = assembly.GetTypes().First(t => t.Name == config.type);
+            optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, config.maturity, config.strike });
             controller = dataVM.ControllerData;
             controller.Initialize(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
             controller.start();

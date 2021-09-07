@@ -9,9 +9,9 @@ namespace SystematicStrategies.Services
 {
     class DataService
     {
-        public List<IDataViewModel> GetAvailableDataFeedProvider()
+        public Dictionary<string, IDataViewModel> GetAvailableDataFeedProvider()
         {
-            return new List<IDataViewModel>() { new SemiHistoricDataViewModel(), new SimulatedDataViewModel() };
+            return new Dictionary<string,IDataViewModel>() { { "SemiHistoric", new SemiHistoricDataViewModel() }, { "SimulatedData", new SimulatedDataViewModel() } };
         }
     }
 }
