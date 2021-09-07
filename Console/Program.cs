@@ -23,7 +23,7 @@ namespace SystematicStrategies.main
         );
 
         [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREanalysisExpostVolatility", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int WREanalysisExpostVolatility(ref int nbValues, double[,] portfolioreturns, double[,] expostVolatility, ref int info);
+        public static extern int WREanalysisExpostVolatility(ref int nbValues, double[] portfolioreturns, double[] expostVolatility, ref int info);
         public static double[,] computeCovarianceMatrix(double[,] returns)
         {
             int dataSize = returns.GetLength(0);
@@ -67,18 +67,25 @@ namespace SystematicStrategies.main
             // sample data
             SemiHistoricDataFeedProvider sdf = new SemiHistoricDataFeedProvider();
             string[] ids = new string[] { "AC FP" };
-            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2010, 01, 05), new DateTime(2010,10,30));
-            List<double> portfolioreturns = new List<double>(); 
+            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2010, 01, 05), new DateTime(2012,12,30));
+            int nbValues = dfList.Count;
+            double[] portfolioreturns = new double[nbValues];
 
-            foreach(var df in dfList)
+            for (int i = 1; i < nbValues; i++)
             {
-                portfolioreturns.Add((double)df.PriceList["AC FP"]);
+                portfolioreturns[i] = Math.Log((double)dfList[i].PriceList["AC FP"] / (double)dfList[i-1].PriceList["AC FP"])* Math.Sqrt(252) ;
             }
 
-            double[,] returns;
-            var nbValues = DayCount.CountBusinessDays(new DateTime(2010, 01, 05), new DateTime(2010, 10, 30));
+            //int nbValues = 214;
+
             int info = 0;
-            int vol = WREanalysisExpostVolatility(ref nbValues, portfolioreturns.ToArray(), returns, ref info);
+
+            double[] vol = { 0 };
+            nbValues--;
+            int v = WREanalysisExpostVolatility(ref nbValues , portfolioreturns, vol , ref info);
+            Console.WriteLine(v);
+            Console.WriteLine(vol[0] );
+            Console.ReadLine(); 
         }
     }
 }
