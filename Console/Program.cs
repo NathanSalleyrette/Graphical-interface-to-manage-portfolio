@@ -17,10 +17,10 @@ namespace SystematicStrategies.main
             );
 
         // import WRE dlls
-        [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREmodelingCov", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREmodelingCorr", CallingConvention = CallingConvention.Cdecl)]
 
         // declaration
-        public static extern int WREmodelingCov(
+        public static extern int WREmodelingCorr(
             ref int returnsSize,
             ref int nbSec,
             double[,] secReturns,
@@ -38,7 +38,7 @@ namespace SystematicStrategies.main
             double[,] covMatrix = new double[nbAssets, nbAssets];
             int info = 0;
             int res;
-            res = WREmodelingCov(ref dataSize, ref nbAssets, returns, covMatrix, ref info);
+            res = WREmodelingCorr(ref dataSize, ref nbAssets, returns, covMatrix, ref info);
             if (res != 0)
             {
                 if (res < 0)
@@ -109,7 +109,7 @@ namespace SystematicStrategies.main
             {
                 for(int j = 0; j<covMatrix.GetLength(0); j++)
                 {
-                    covMatrix[i, j] = Math.Sqrt(covMatrix[i,j] / Math.Sqrt(covMatrix[i,i]*covMatrix[j,j])/ Math.Sqrt(252));
+                    covMatrix[i, j] = covMatrix[i,j] / Math.Sqrt(covMatrix[i,i]*covMatrix[j,j]);
                 }
             }
             return covMatrix;
@@ -153,7 +153,7 @@ namespace SystematicStrategies.main
 
             double[,] covMatrix = computeCovarianceMatrix(covportfolioreturns);
 
-            double[,] covMatrixUpdate = Update(covMatrix, sdf.NumberOfDaysPerYear);
+            //double[,] covMatrixUpdate = Update(covMatrix, sdf.NumberOfDaysPerYear);
 
 
             dispMatrix(covMatrix);
