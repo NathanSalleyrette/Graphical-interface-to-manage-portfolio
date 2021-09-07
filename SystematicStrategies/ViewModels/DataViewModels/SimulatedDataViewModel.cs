@@ -10,10 +10,17 @@ namespace SystematicStrategies.ViewModels.DataViewModels
     internal class SimulatedDataViewModel : IDataViewModel
     {
         private IDataFeedProvider dataFeedProvider;
+        private AbstractController controllerData;
 
         public SimulatedDataViewModel()
         {
             dataFeedProvider = new SimulatedDataFeedProvider();
+            controllerData = new Controller();
+        }
+
+        public AbstractController ControllerData
+        {
+            get { return controllerData; }
         }
 
         public IDataFeedProvider DataFeedProvider

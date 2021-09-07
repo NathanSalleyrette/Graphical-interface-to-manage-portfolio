@@ -10,10 +10,18 @@ namespace SystematicStrategies.ViewModels.DataViewModels
     internal class SemiHistoricDataViewModel : IDataViewModel
     {
         private IDataFeedProvider dataFeedProvider;
+        private AbstractController controllerData;
 
         public SemiHistoricDataViewModel()
         {
             dataFeedProvider = new SemiHistoricDataFeedProvider();
+            controllerData = new Controller();
+
+        }
+
+        public AbstractController ControllerData
+        {
+            get { return controllerData; }
         }
 
         public IDataFeedProvider DataFeedProvider

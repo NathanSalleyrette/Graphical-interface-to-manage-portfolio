@@ -20,7 +20,7 @@ namespace SystematicStrategies
 {
     internal class MainWindowViewModel : BindableBase
     {
-        private Controller controller;
+        private AbstractController controller;
         private bool controllerStarted;
         private string _result = "Résultat en attente";
         private IDataViewModel dataVM;
@@ -116,7 +116,7 @@ namespace SystematicStrategies
         {
             Share action = new Share("AC FP", "AC FP");
             Share action1 = new Share("ACA FP", "ACA FP");
-            double strike = 10;
+            double strike = 8;
             //Share[] underlyingShares = new Share[2] { action, action1 };
             //double[] weights = new double[2] { 0.25, 0.75 };
 
@@ -127,11 +127,12 @@ namespace SystematicStrategies
             //VanillaCallModel optcall = new VanillaCallModel("VCall", action, LastDate, strike);
             //BasketModel optbasket = new BasketModel("BasketOPT", underlyingShares, weights, LastDate, strike);
 
-           // optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
-            optionVM = new VanillaCallViewModel("VCakk", underlyingShares[0], LastDate, strike);
+            optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
+            //optionVM = new VanillaCallViewModel("VCakk", underlyingShares[0], LastDate, strike);
 
             //var strat = new VanillaNeutralStrategy();
-            controller = new Controller(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
+            controller = dataVM.ControllerData;
+            controller.Initialize(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();

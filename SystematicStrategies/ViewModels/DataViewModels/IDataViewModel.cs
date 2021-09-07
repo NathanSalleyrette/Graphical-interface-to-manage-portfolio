@@ -13,6 +13,8 @@ namespace SystematicStrategies.ViewModels.DataViewModels
 
         IDataFeedProvider DataFeedProvider { get; }
 
+        AbstractController ControllerData { get;  }
+
         string Name { get; }
 
         #endregion Public Properties

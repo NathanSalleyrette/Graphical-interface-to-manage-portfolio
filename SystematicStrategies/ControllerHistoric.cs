@@ -9,11 +9,11 @@ using SystematicStrategies.ViewModels.DataViewModels;
 
 namespace SystematicStrategies
 {
-    internal class Controller : AbstractController
+    internal class ControllerHistoric : AbstractController
     {
 
 
-
+        // A CHANGER
         public override void CalculVolatilities()
         {
             var n = optionToHedge.UnderlyingShareIds.Length;
@@ -26,6 +26,6 @@ namespace SystematicStrategies
                 i += 1;
             };
         }
-       
+
     }
 }
