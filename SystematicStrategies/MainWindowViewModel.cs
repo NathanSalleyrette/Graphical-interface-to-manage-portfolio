@@ -45,7 +45,7 @@ namespace SystematicStrategies
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
-            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "net/SystematicStrategies/Configs/config.json");
+            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "SystematicStrategies/Configs/config.json");
             string text = System.IO.File.ReadAllText(startupPath);
             Console.WriteLine(text);
             config = JsonConvert.DeserializeObject<Config>(text);
@@ -172,7 +172,7 @@ namespace SystematicStrategies
             var type = assembly.GetTypes().First(t => t.Name == config.type);
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, config.maturity, config.strike });
             controller = dataVM.ControllerData;
-            controller.Initialize(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
+            controller.Initialize(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider, 3);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();

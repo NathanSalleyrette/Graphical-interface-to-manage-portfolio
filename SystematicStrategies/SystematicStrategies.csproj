@@ -131,13 +131,14 @@
     <Compile Include="AbstractController.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerHistoric.cs" />
-    <Compile Include="Estimator\Estimator.cs" />
+    <Compile Include="Estimators\Estimator.cs" />
     <Compile Include="Historique\DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataClasses1.dbml</DependentUpon>
     </Compile>
     <Compile Include="Historique\HistoricDataManager.cs" />
+    <Compile Include="Historique\IDataManger.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Models\ChartSpot.cs" />
     <Compile Include="Models\Config.cs" />

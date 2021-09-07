@@ -8,7 +8,7 @@ using SystematicStrategies.Historique;
 
 namespace SystematicStrategies.DataManager
 {
-    class HistoricDataManager : IDataFeedProvider
+    class HistoricDataManager : IDataManager, IDataFeedProvider
     {
         public DateTime MinDate { get; }
 

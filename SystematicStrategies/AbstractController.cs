@@ -22,9 +22,13 @@ namespace SystematicStrategies
         public string[] dateLabels;
         public double[] volatilities;
         public double[,] corMatrix;
+        public int windowSize;
+        public DateTime dayOfController;
 
-        public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider)
+        public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, int windowSize)
         {
+            this.windowSize = windowSize;
+            dayOfController = startDate;
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option.Option;
             var n = optionToHedge.UnderlyingShareIds.Length;
@@ -56,9 +60,10 @@ namespace SystematicStrategies
             DateTime lastUpdate = dataFeedList[0].Date;
             foreach (DataFeed dataFeed in dataFeedList)
             {
+                dayOfController = dataFeed.Date;
                 double dayCount = DayCount.CountBusinessDays(lastUpdate, dataFeed.Date);
                 double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount / dataFeedProvider.NumberOfDaysPerYear);
-                //CalculVolatilities();
+                CalculVolatilities();
                 portfolio.Update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate, volatilities, corMatrix);
                 lastUpdate = dataFeed.Date;
                 payoff = optionToHedge.GetPayoff(dataFeed.PriceList);
