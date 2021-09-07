@@ -31,8 +31,8 @@
 
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <DatePicker SelectedDate="{Binding FirstDate}"></DatePicker>
-            <DatePicker SelectedDate="{Binding LastDate}"></DatePicker>
+            <DatePicker SelectedDate="{Binding FirstDate}" Text="{Binding FirstDate}" DisplayDate="{Binding FirstDate}"></DatePicker>
+            <DatePicker SelectedDate="{Binding LastDate}" Text="{Binding LastDate}" DisplayDate="{Binding LastDate}"></DatePicker>
             <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
             <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
             <ContentControl ContentTemplate="{StaticResource SelectionViewTemplate}" Content="{Binding}" />

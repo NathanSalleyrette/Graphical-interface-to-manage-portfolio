@@ -30,9 +30,11 @@ namespace SystematicStrategies
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
         private Config config = null;
+        private DateTime firstDate;
+        private DateTime lastDate;
         public MainWindowViewModel()
         {
-            //FirstDate = new DatePicker();
+         //   FirstDate = new DateTime();
             //FirstDate.SelectedDate = new DateTime(2009, 12, 12);
             StartCommand = new DelegateCommand(StartController, CanStartController);
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
@@ -45,7 +47,8 @@ namespace SystematicStrategies
             string text = System.IO.File.ReadAllText(startupPath);
             Console.WriteLine(text);
             config = JsonConvert.DeserializeObject<Config>(text);
-
+            FirstDate = config.startDate;
+            LastDate = config.maturity;
             dataVM = AvailableDataFeedProviderDic[config.dataType];
         }
 
@@ -54,18 +57,19 @@ namespace SystematicStrategies
         public List<IOptionViewModel> AvailableOptions { get; }
 
         public DateTime FirstDate { 
-            get { return config.startDate; }
+            get { return firstDate; }
             set
             {
-                SetProperty(ref config.startDate, value);
+                if (VerifyDate(value)) SetProperty(ref firstDate, value);
+                else SetProperty(ref firstDate, new DateTime(2009,12,14));
             }
         }
 
         public DateTime LastDate { 
-            get { return config.maturity; }
+            get { return lastDate; }
             set
             {
-                SetProperty(ref config.maturity, value);
+                if (VerifyDate(value)) SetProperty(ref lastDate, value);
             }
         }
 
@@ -164,6 +168,13 @@ namespace SystematicStrategies
         private bool CanStopController()
         {
             return controllerStarted;
+        }
+
+        private bool VerifyDate(DateTime date)
+        {
+            DateTime startDate = new DateTime(2009, 12, 14);
+            DateTime endDate = new DateTime(2013, 06, 13);
+            return (date.DayOfWeek != DayOfWeek.Sunday) & (date.DayOfWeek != DayOfWeek.Saturday) & (date >= startDate) & (date <= endDate);
         }
 
 
