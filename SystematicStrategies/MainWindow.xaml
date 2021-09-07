@@ -31,10 +31,11 @@
 
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <DatePicker SelectedDate="{Binding FirstDate}" Text="{Binding FirstDate}" DisplayDate="{Binding FirstDate}"></DatePicker>
-            <DatePicker SelectedDate="{Binding LastDate}" Text="{Binding LastDate}" DisplayDate="{Binding LastDate}"></DatePicker>
+            <DatePicker SelectedDate="{Binding FirstDate}" DisplayDate="{Binding FirstDateDisplay}"></DatePicker>
+            <DatePicker SelectedDate="{Binding LastDate}" DisplayDate="{Binding LastDateDisplay}"></DatePicker>
             <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
             <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
+            <Button Command="{Binding SaveConfigCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Save Config</Button>
             <ContentControl ContentTemplate="{StaticResource SelectionViewTemplate}" Content="{Binding}" />
 
         </StackPanel>

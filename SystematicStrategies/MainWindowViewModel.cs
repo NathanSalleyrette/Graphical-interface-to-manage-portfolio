@@ -32,12 +32,14 @@ namespace SystematicStrategies
         private Config config = null;
         private DateTime firstDate;
         private DateTime lastDate;
+        private DateTime firstDateDisplay;
+        private DateTime lastDateDisplay;
+
         public MainWindowViewModel()
         {
-         //   FirstDate = new DateTime();
-            //FirstDate.SelectedDate = new DateTime(2009, 12, 12);
             StartCommand = new DelegateCommand(StartController, CanStartController);
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
+            SaveConfigCommand = new DelegateCommand(SaveConfigController, CanStartController);
             var dataService = new DataService();
             var AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
@@ -49,7 +51,10 @@ namespace SystematicStrategies
             config = JsonConvert.DeserializeObject<Config>(text);
             FirstDate = config.startDate;
             LastDate = config.maturity;
+            FirstDateDisplay = config.startDate;
+            LastDateDisplay = config.maturity;
             dataVM = AvailableDataFeedProviderDic[config.dataType];
+            ControllerStarted = false;
         }
 
         public List<IDataViewModel> AvailableDataFeedProvider { get; }
@@ -61,7 +66,8 @@ namespace SystematicStrategies
             set
             {
                 if (VerifyDate(value)) SetProperty(ref firstDate, value);
-                else SetProperty(ref firstDate, new DateTime(2009,12,14));
+                else SetProperty(ref firstDate, FirstDate);
+                StartCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -70,6 +76,26 @@ namespace SystematicStrategies
             set
             {
                 if (VerifyDate(value)) SetProperty(ref lastDate, value);
+                else SetProperty(ref lastDate, LastDate);
+                StartCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public DateTime FirstDateDisplay
+        {
+            get { return firstDateDisplay; }
+            set
+            {
+                SetProperty(ref firstDateDisplay, value);
+            }
+        }
+
+        public DateTime LastDateDisplay
+        {
+            get { return lastDateDisplay; }
+            set
+            {
+                SetProperty(ref lastDateDisplay, value);
             }
         }
 
@@ -125,6 +151,8 @@ namespace SystematicStrategies
 
         public DelegateCommand ResetCommand { get; private set; }
 
+        public DelegateCommand SaveConfigCommand { get; private set; }
+
         public bool ControllerStarted
         {
             get { return controllerStarted; }
@@ -160,15 +188,21 @@ namespace SystematicStrategies
             Result = "Résultat en attente";
         }
 
+        private void SaveConfigController()
+        {
+
+        }
+
         private bool CanStartController()
         {
-            return !controllerStarted;
+            return !controllerStarted & FirstDate < LastDate;
         }
 
         private bool CanStopController()
         {
             return controllerStarted;
         }
+
 
         private bool VerifyDate(DateTime date)
         {

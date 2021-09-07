@@ -17,15 +17,6 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <ComboBox ItemsSource="{Binding Path=AvailableOptions}" Margin="10"
-                          SelectedValue="{Binding OptionVM}"
-                          Padding="5,0,5,0">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Path=Name, Mode=OneWay}" Padding="10,5,10,5" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
         </StackPanel>
     </Grid>
 </UserControl>
