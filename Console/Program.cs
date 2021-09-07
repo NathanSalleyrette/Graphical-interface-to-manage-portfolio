@@ -107,10 +107,8 @@ namespace SystematicStrategies.main
         {
             for(int i = 0; i<covMatrix.GetLength(0); i++)
             {
-                for(int j = 0; j<covMatrix.GetLength(0); j++)
-                {
-                    covMatrix[i, j] = covMatrix[i,j] / Math.Sqrt(covMatrix[i,i]*covMatrix[j,j]);
-                }
+                covMatrix[i, i] /= Math.Sqrt(Math.Sqrt(numberOfDays));
+                
             }
             return covMatrix;
         }
@@ -125,7 +123,7 @@ namespace SystematicStrategies.main
 
             // sample data
             SimulatedDataFeedProvider sdf = new SimulatedDataFeedProvider();
-            string[] ids = new string[] { "AC FP", "ACA FP" };
+            string[] ids = new string[] { "AC FP", "ACA FP" ,"bim"};
             List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2000, 01, 05), new DateTime(2041,12,30));
             int nbValues = dfList.Count;
             double[] portfolioreturns = new double[nbValues];
@@ -153,7 +151,7 @@ namespace SystematicStrategies.main
 
             double[,] covMatrix = computeCovarianceMatrix(covportfolioreturns);
 
-            //double[,] covMatrixUpdate = Update(covMatrix, sdf.NumberOfDaysPerYear);
+            double[,] covMatrixUpdate = Update(covMatrix, sdf.NumberOfDaysPerYear);
 
 
             dispMatrix(covMatrix);
