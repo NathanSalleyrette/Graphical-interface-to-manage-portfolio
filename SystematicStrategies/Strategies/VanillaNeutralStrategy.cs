@@ -17,12 +17,12 @@ namespace SystematicStrategies.Strategies
             
         }
 
-        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
+        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear, double[] volatilities, double[,] corMatrix)
         {
             Dictionary<string, double> res = new Dictionary<string, double>();
             //var volatility = !(dataFeedList is HistoricDataFeedProvider) ? 0.25 : null;
             var Pricer = new Pricer();
-            var volatility = 0.25;
+            var volatility = volatilities[0];
             string UnderlyingShareId = option.UnderlyingShareIds[0];
             var S = decimal.ToDouble(market.PriceList[UnderlyingShareId]);
             PricingResults pricingResults = Pricer.Price((VanillaCall)option, market.Date, NumberOfDaysPerYear, S, volatility);

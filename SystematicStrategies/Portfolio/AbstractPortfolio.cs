@@ -49,8 +49,8 @@ namespace SystematicStrategies.Portfolio
 
         
 
-        public abstract void Initialize(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear);
-        public void Update(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate)
+        public abstract void Initialize(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double[] volatilities, double[,] corMatrix);
+        public void Update(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate, double[] volatilities, double[,] corMatrix)
         {
             
             value = investmentFreeRiskRate * riskRate;
@@ -69,7 +69,7 @@ namespace SystematicStrategies.Portfolio
             {
                 value += assetWeights[asset] * (double)dataFeed.PriceList[asset];
             }
-            assetWeights = strategy.UpdateCompo(option, dataFeed, dataFeedList, nbOfDaysPerYear);
+            assetWeights = strategy.UpdateCompo(option, dataFeed, dataFeedList, nbOfDaysPerYear, volatilities, corMatrix);
             investmentFreeRiskRate = value;
             foreach (var asset in assetWeights.Keys)
             {

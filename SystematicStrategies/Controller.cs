@@ -20,11 +20,18 @@ namespace SystematicStrategies
         public List<double> optionPrices;
         public List<double> portfolioValues;
         public string[] dateLabels;
+        public double[] volatilities;
+        public double[,] corMatrix;
 
         public Controller(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider)
         {
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option.Option;
+            var n = optionToHedge.UnderlyingShareIds.Length;
+            volatilities = new double[n];
+            corMatrix = new double[n, n];
+            CalculVolatilities();
+
             dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
             dateLabels = new string[dataFeedList.Count];
             var i = 0;
@@ -37,9 +44,22 @@ namespace SystematicStrategies
             portfolioValues = new List<double>() { };
             this.strategy = option.Strategy;
             this.portfolio = option.Portfolio;
-            portfolio.Initialize(optionToHedge, this.strategy, dataFeedList[0], dataFeedList, dataFeedProvider.NumberOfDaysPerYear);
+            portfolio.Initialize(optionToHedge, strategy, dataFeedList[0], dataFeedList, dataFeedProvider.NumberOfDaysPerYear, volatilities, corMatrix);
             optionPrices.Add(this.strategy.optionPrice);
             portfolioValues.Add(portfolio.value);
+        }
+
+        public void CalculVolatilities()
+        {
+            var n = optionToHedge.UnderlyingShareIds.Length;
+            for (var j = 0; j < n * n; j++) corMatrix[j % n, j / n] = 0.15;
+            var i = 0;
+            foreach (string UnderlyingShareId in optionToHedge.UnderlyingShareIds)
+            {
+                volatilities[i] = 0.25;
+                corMatrix[i, i] = 0.25;
+                i += 1;
+            };
         }
         public void start()
         {
@@ -48,7 +68,8 @@ namespace SystematicStrategies
             {
                 double dayCount = DayCount.CountBusinessDays(lastUpdate, dataFeed.Date);
                 double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount / dataFeedProvider.NumberOfDaysPerYear);
-                portfolio.Update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate);
+                //CalculVolatilities();
+                portfolio.Update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate, volatilities, corMatrix);
                 lastUpdate = dataFeed.Date;
                 payoff = optionToHedge.GetPayoff(dataFeed.PriceList);
                 optionPrices.Add(strategy.optionPrice);

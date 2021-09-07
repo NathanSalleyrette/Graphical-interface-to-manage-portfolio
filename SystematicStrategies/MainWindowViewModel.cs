@@ -116,7 +116,7 @@ namespace SystematicStrategies
         {
             Share action = new Share("AC FP", "AC FP");
             Share action1 = new Share("ACA FP", "ACA FP");
-            double strike = 8;
+            double strike = 10;
             //Share[] underlyingShares = new Share[2] { action, action1 };
             //double[] weights = new double[2] { 0.25, 0.75 };
 
@@ -127,7 +127,9 @@ namespace SystematicStrategies
             //VanillaCallModel optcall = new VanillaCallModel("VCall", action, LastDate, strike);
             //BasketModel optbasket = new BasketModel("BasketOPT", underlyingShares, weights, LastDate, strike);
 
-            optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
+           // optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
+            optionVM = new VanillaCallViewModel("VCakk", underlyingShares[0], LastDate, strike);
+
             //var strat = new VanillaNeutralStrategy();
             controller = new Controller(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
             controller.start();

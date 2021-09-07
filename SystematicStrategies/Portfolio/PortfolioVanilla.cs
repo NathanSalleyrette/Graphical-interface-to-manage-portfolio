@@ -12,11 +12,11 @@ namespace SystematicStrategies.Portfolio
 {
     internal class PortfolioVanilla : AbstractPortfolio
     {
-        public override void Initialize(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear)
+        public override void Initialize(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double[] volatilities, double[,] corMatrix)
         {
             Pricer pricer = new Pricer();
             value = pricer.Price((VanillaCall) option, dataFeed.Date, nbOfDaysPerYear, decimal.ToDouble(dataFeed.PriceList[option.UnderlyingShareIds[0]]), 0.25).Price;
-            assetWeights = strategy.UpdateCompo((VanillaCall) option, dataFeed, dataFeedList, nbOfDaysPerYear);
+            assetWeights = strategy.UpdateCompo((VanillaCall)option, dataFeed, dataFeedList, nbOfDaysPerYear, volatilities, corMatrix);
             investmentFreeRiskRate = value;
             foreach (var asset in assetWeights.Keys)
             {

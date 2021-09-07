@@ -12,21 +12,18 @@ namespace SystematicStrategies.Strategies
     internal class BasketNeutralStrategy : AbstractDeltaNeutralStrategy
     {
 
-        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
+        public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear, double[] volatilities, double[,] corMatrix)
         {
             //var volatility = !(dataFeedList is HistoricDataFeedProvider) ? 0.25 : null;
             Dictionary<string, double> res = new Dictionary<string, double>();
             var Pricer = new Pricer();
             var n = option.UnderlyingShareIds.Length;
             double[] spots = new double[n];
-            double[] volatilities = new double[n];
-            double[,] corMatrix = new double[n, n];
-            for (var j = 0; j < n * n; j++) corMatrix[j % n, j / n] = 0.15;
+
             var i = 0;
             foreach (string UnderlyingShareId in option.UnderlyingShareIds)
             {
-                volatilities[i] = 0.25;
-                corMatrix[i, i] = 0.25;
+
                 spots[i] = decimal.ToDouble(market.PriceList[UnderlyingShareId]);
                 i += 1;
             };
