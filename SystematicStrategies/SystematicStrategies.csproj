@@ -132,6 +132,12 @@
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerHistoric.cs" />
     <Compile Include="Estimator\Estimator.cs" />
+    <Compile Include="Historique\DataClasses1.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataClasses1.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Historique\HistoricDataManager.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Models\ChartSpot.cs" />
     <Compile Include="Models\Config.cs" />
@@ -147,6 +153,7 @@
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Strategies\VanillaNeutralStrategy.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModels\HistoricDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\SimulatedDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\SemiHistoricDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\IDataViewModel.cs" />
@@ -198,7 +205,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Configs\config.json" />
+    <None Include="Historique\DataClasses1.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>DataClasses1.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Historique\DataClasses1.dbml.layout">
+      <DependentUpon>DataClasses1.dbml</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

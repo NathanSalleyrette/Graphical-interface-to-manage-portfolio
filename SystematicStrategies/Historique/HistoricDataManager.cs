@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Historique;
 
 namespace SystematicStrategies.DataManager
 {
@@ -22,9 +23,9 @@ namespace SystematicStrategies.DataManager
             List<DataFeed> globalMarket = new List<DataFeed>();
 
             // Loading of the datas
-            using (DataBaseAccessDataContext asdc = new DataBaseAccessDataContext())
+            using (DataClasses1DataContext asdc = new DataClasses1DataContext())
             {
-                var dates = (from lignes in asdc.HistoricalShareValues
+                var dates = (from lignes in asdc.HistoricalShareValues 
                              select lignes.date).Distinct();
 
                 // dates, tables 
