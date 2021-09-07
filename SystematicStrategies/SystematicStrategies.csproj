@@ -121,13 +121,9 @@
     <Compile Include="Estimator\Estimator.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Models\ChartSpot.cs" />
-    <Compile Include="Models\OptionModel\BasketModel.cs" />
-    <Compile Include="Models\OptionModel\IOptionModel.cs" />
-    <Compile Include="Models\OptionModel\VanillaCallModel.cs" />
-    <Compile Include="Portfolio\AbstractPortofolio.cs" />
+    <Compile Include="Portfolio\AbstractPortfolio.cs" />
     <Compile Include="Portfolio\PortfolioBasket.cs" />
     <Compile Include="Portfolio\PortfolioVanilla.cs" />
-    <Compile Include="Services\OptionService.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Strategies\BasketNeutralStrategy.cs" />
     <Compile Include="Strategies\DeltaNeutralStrategy.cs" />

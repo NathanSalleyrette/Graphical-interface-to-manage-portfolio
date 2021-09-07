@@ -15,7 +15,6 @@ using SystematicStrategies.ViewModels.DataViewModels;
 using SystematicStrategies.Services;
 using SystematicStrategies.Models;
 using SystematicStrategies.ViewModels;
-using SystematicStrategies.Models.OptionModel;
 
 namespace SystematicStrategies
 {
@@ -36,9 +35,6 @@ namespace SystematicStrategies
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
             var dataService = new DataService();
             AvailableDataFeedProvider = dataService.GetAvailableDataFeedProvider();
-            var optionService = new OptionService();
-            AvailableOptions = optionService.GetAvailableOptions();
-            optionVM = AvailableOptions.First();
             dataVM = AvailableDataFeedProvider.First();
             ChartVM = new ChartViewModel();
         }
@@ -128,12 +124,12 @@ namespace SystematicStrategies
             double[] weights = new double[1] { 1 };
 
 
-            VanillaCallModel optcall = new VanillaCallModel("VCall", action, LastDate, strike);
-            BasketModel optbasket = new BasketModel("BasketOPT", underlyingShares, weights, LastDate, strike);
+            //VanillaCallModel optcall = new VanillaCallModel("VCall", action, LastDate, strike);
+            //BasketModel optbasket = new BasketModel("BasketOPT", underlyingShares, weights, LastDate, strike);
 
-
+            optionVM = new BasketViewModel("BasketOPT", underlyingShares, weights, LastDate, strike);
             //var strat = new VanillaNeutralStrategy();
-            controller = new Controller(optbasket, FirstDate, LastDate, dataVM.DataFeedProvider);
+            controller = new Controller(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();

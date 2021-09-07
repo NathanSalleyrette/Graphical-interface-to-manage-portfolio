@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Portfolio;
+using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies.ViewModels.DataViewModels
 {
@@ -12,13 +14,13 @@ namespace SystematicStrategies.ViewModels.DataViewModels
     {
         #region Public Properties
 
-        IOption Option { get; }
+        IOption Option { get;}
+        IStrategy Strategy { get; }
+        AbstractPortfolio Portfolio { get; }
 
         string Name { get; }
 
         #endregion Public Properties
-
-        void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike);
 
     }
 }

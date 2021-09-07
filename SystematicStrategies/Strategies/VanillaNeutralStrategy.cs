@@ -20,6 +20,7 @@ namespace SystematicStrategies.Strategies
         public override Dictionary<string, double> UpdateCompo(IOption option, DataFeed market, List<DataFeed> dataFeedList, int NumberOfDaysPerYear)
         {
             Dictionary<string, double> res = new Dictionary<string, double>();
+            //var volatility = !(dataFeedList is HistoricDataFeedProvider) ? 0.25 : null;
             var Pricer = new Pricer();
             var volatility = 0.25;
             string UnderlyingShareId = option.UnderlyingShareIds[0];

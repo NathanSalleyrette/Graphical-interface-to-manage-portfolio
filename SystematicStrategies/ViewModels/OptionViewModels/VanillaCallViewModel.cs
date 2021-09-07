@@ -5,32 +5,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Portfolio;
+using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies.ViewModels.DataViewModels
 {
     internal class VanillaCallViewModel : IOptionViewModel
     {
-        private IOption option;
+        private VanillaCall option;
+        private VanillaNeutralStrategy strategy;
+        private PortfolioVanilla portfolio;
 
-        public VanillaCallViewModel()
+        public VanillaCallViewModel(string name, Share share, DateTime maturity, double strike)
         {
-            option = new VanillaCall("", new Share("",""), new DateTime(), 0);
+            option = new VanillaCall(name, share, maturity, strike);
+            strategy = new VanillaNeutralStrategy();
+            portfolio = new PortfolioVanilla();
         }
 
-        public IOption Option
-        {
-            get { return option; }
-        }
-
-        public string Name
-        {
-            get { return "VanillaCall"; }
-        }
-
-        public void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike)
-        {
-            option = new VanillaCall(nom, actions.First(), LastDate, strike);
-        }
-
+        public IOption Option => option;
+        public IStrategy Strategy => strategy;
+        public AbstractPortfolio Portfolio => portfolio;
+        public string Name => "VanillaCall";
     }
 }

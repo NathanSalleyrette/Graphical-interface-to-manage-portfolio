@@ -5,32 +5,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SystematicStrategies.Portfolio;
+using SystematicStrategies.Strategies;
 
 namespace SystematicStrategies.ViewModels.DataViewModels
 {
     internal class BasketViewModel : IOptionViewModel
     {
-        private IOption option;
+        private BasketOption option;
+        private BasketNeutralStrategy strategy;
+        private PortfolioBasket portfolio;
 
-        public BasketViewModel()
+        public BasketViewModel(string name, Share[] underlyingShares, double[] weights, DateTime maturity, double strike)
         {
-            option = new BasketOption("", new Share[0], new double[0], new DateTime(), 0);
+            option = new BasketOption(name, underlyingShares, weights, maturity, strike);
+            strategy = new BasketNeutralStrategy();
+            portfolio = new PortfolioBasket();
         }
 
-        public IOption Option
-        {
-            get { return option; }
-        }
+        public IOption Option => option;
+        public IStrategy Strategy => strategy;
+        public AbstractPortfolio Portfolio => portfolio;
 
-        public string Name
-        {
-            get { return "BasketOption"; }
-        }
-
-        public void Maj(string nom, Share[] actions, double[] weight, DateTime LastDate, double strike)
-        {
-            option = new BasketOption(nom, actions, weight, LastDate, strike);
-        }
-
+        public string Name => "BasketOption";
     }
 }

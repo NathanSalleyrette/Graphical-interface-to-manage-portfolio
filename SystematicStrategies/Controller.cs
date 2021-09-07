@@ -3,9 +3,9 @@ using PricingLibrary.Utilities;
 using PricingLibrary.Utilities.MarketDataFeed;
 using System;
 using System.Collections.Generic;
-using SystematicStrategies.Models.OptionModel;
 using SystematicStrategies.Portfolio;
 using SystematicStrategies.Strategies;
+using SystematicStrategies.ViewModels.DataViewModels;
 
 namespace SystematicStrategies
 {
@@ -21,7 +21,7 @@ namespace SystematicStrategies
         public List<double> portfolioValues;
         public string[] dateLabels;
 
-        public Controller(IOptionModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider)
+        public Controller(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider)
         {
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option.Option;
