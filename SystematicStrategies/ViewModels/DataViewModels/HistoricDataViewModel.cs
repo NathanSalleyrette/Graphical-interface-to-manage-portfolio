@@ -16,7 +16,7 @@ namespace SystematicStrategies.ViewModels.DataViewModels
         public HistoricDataViewModel()
         {
             dataFeedProvider = new HistoricDataManager();
-            controllerData = new Controller();
+            controllerData = new ControllerHistoric();
 
         }
 

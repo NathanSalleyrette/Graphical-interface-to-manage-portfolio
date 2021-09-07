@@ -17,16 +17,16 @@ namespace SystematicStrategies
     internal class ControllerHistoric : AbstractController
     {
 
-        // A CHANGER
         public override void CalculVolatilities()
         {
             var n = optionToHedge.UnderlyingShareIds.Length;
             Estimator est = new Estimator();
             for (int i = 0; i < n; i++) {
-                volatilities[i] =  est.Volatity(dataFeedList, dataFeedProvider.NumberOfDaysPerYear, optionToHedge.UnderlyingShareIds[i]);
+                volatilities[i] = est.Volatity(dataFeedList, dataFeedProvider.NumberOfDaysPerYear, optionToHedge.UnderlyingShareIds[i]);
             }
             var window = GetWindow(windowSize, dataFeedList, dayOfController);
-            corMatrix =  est.CovMatrix(window, optionToHedge.UnderlyingShareIds, dataFeedProvider.NumberOfDaysPerYear);
+            if (n > 1) corMatrix = est.CovMatrix(window, optionToHedge.UnderlyingShareIds, dataFeedProvider.NumberOfDaysPerYear);
+            else corMatrix = new double[,] { { volatilities[0]} };
         }
 
         public List<DataFeed> GetWindow(int numberOfDays, List<DataFeed> globalMarket, DateTime end)

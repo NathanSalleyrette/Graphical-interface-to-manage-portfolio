@@ -28,15 +28,17 @@ namespace SystematicStrategies
         public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, int windowSize)
         {
             this.windowSize = windowSize;
-            dayOfController = startDate;
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option.Option;
             var n = optionToHedge.UnderlyingShareIds.Length;
             volatilities = new double[n];
             corMatrix = new double[n, n];
-            CalculVolatilities();
 
             dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
+            dayOfController = dataFeedList[2].Date;
+            //dayOfController = startDate;
+            CalculVolatilities();
+
             dateLabels = new string[dataFeedList.Count];
             var i = 0;
             foreach (var dataFeed in dataFeedList)
