@@ -25,8 +25,7 @@ namespace SystematicStrategies.DataManager
             // Loading of the datas
             using (DataClasses1DataContext asdc = new DataClasses1DataContext())
             {
-                var dates = (from lignes in asdc.HistoricalShareValues 
-                             select lignes.date).Distinct();
+                var dates = asdc.HistoricalShareValues.Select(ligne => ligne.date).Distinct().Where(ligne => ligne.Date >= start.Date && ligne.Date <= end.Date).OrderBy(ligne => ligne.Date);
 
                 // dates, tables 
                 // Creation of a dataset

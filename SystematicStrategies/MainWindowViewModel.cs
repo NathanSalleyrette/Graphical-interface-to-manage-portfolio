@@ -45,7 +45,7 @@ namespace SystematicStrategies
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
-            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "SystematicStrategies/Configs/config.json");
+            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "net/SystematicStrategies/Configs/config.json");
             string text = System.IO.File.ReadAllText(startupPath);
             Console.WriteLine(text);
             config = JsonConvert.DeserializeObject<Config>(text);

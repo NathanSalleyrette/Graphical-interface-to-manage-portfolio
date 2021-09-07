@@ -10,7 +10,7 @@
   ],
   "weights": [ 1 ],
   "startDate": "2010-05-13T00:00:00.000Z",
-  "maturity": "2012-03-01T00:00:00.000Z",
+  "maturity": "2010-05-17T00:00:00.000Z",
   "estimatedWindowSize": 1,
   "dataType": "SimulatedData"
 }
