@@ -10,11 +10,17 @@ namespace SystematicStrategies.main
 {
     class Program
     {
+
+        [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREmodelingLogReturns", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int WREmodelingLogReturns(
+            ref int nbValues, ref int nbAsset, double[,] assetValues, ref int horizon, double[,] assetreturns, ref int info 
+            );
+
         // import WRE dlls
-        [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREmodelingCov", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREmodelingCorr", CallingConvention = CallingConvention.Cdecl)]
 
         // declaration
-        public static extern int WREmodelingCov(
+        public static extern int WREmodelingCorr(
             ref int returnsSize,
             ref int nbSec,
             double[,] secReturns,
@@ -24,6 +30,7 @@ namespace SystematicStrategies.main
 
         [DllImport(@"wre-ensimag-c.dll", EntryPoint = "WREanalysisExpostVolatility", CallingConvention = CallingConvention.Cdecl)]
         public static extern int WREanalysisExpostVolatility(ref int nbValues, double[] portfolioreturns, double[] expostVolatility, ref int info);
+
         public static double[,] computeCovarianceMatrix(double[,] returns)
         {
             int dataSize = returns.GetLength(0);
@@ -31,7 +38,7 @@ namespace SystematicStrategies.main
             double[,] covMatrix = new double[nbAssets, nbAssets];
             int info = 0;
             int res;
-            res = WREmodelingCov(ref dataSize, ref nbAssets, returns, covMatrix, ref info);
+            res = WREmodelingCorr(ref dataSize, ref nbAssets, returns, covMatrix, ref info);
             if (res != 0)
             {
                 if (res < 0)
@@ -57,6 +64,56 @@ namespace SystematicStrategies.main
             }
         }
 
+        public static double[,] GetReturns(List<DataFeed> dfList, string[] ids)
+        {
+            double[,] covportfolioreturns = new double[dfList.Count, ids.Length];
+
+            int dataSize = covportfolioreturns.GetLength(0);
+            int nbAssets = covportfolioreturns.GetLength(1);
+
+            // for (int i = 1; i < dataSize; ++i)
+            //{
+            //  for (int j = 0; j < nbAssets; ++j)
+            //{
+            //  double logreturn = Math.Log((double)(dfList[i].PriceList[ids[j]] / dfList[i-1].PriceList[ids[j]]));
+            //covportfolioreturns[i-1, j] = logreturn;
+            // }
+            //}
+
+            for(int i = 0; i<dataSize; i++)
+            {
+                for(int j = 0; j<nbAssets; j++)
+                {
+                    covportfolioreturns[i, j] = (double)dfList[i].PriceList[ids[j]];
+                }
+            }
+
+            double[,] assetreturns = new double[dataSize-1, nbAssets];
+            int info = 0;
+            int horizon = 1;
+            dataSize--;
+            int res = WREmodelingLogReturns(ref dataSize, ref nbAssets, covportfolioreturns, ref horizon, assetreturns, ref info);
+            if (res != 0)
+            {
+                if (res < 0)
+                    throw new Exception("ERROR: WREmodelingCov encountred a problem. See info parameter for more details");
+                else
+                    throw new Exception("WARNING: WREmodelingCov encountred a problem. See info parameter for more details");
+            }
+            return assetreturns;
+        }
+
+        public static double[,] Update(double[,] covMatrix, int numberOfDays)
+        {
+            for(int i = 0; i<covMatrix.GetLength(0); i++)
+            {
+                covMatrix[i, i] /= Math.Sqrt(Math.Sqrt(numberOfDays));
+                
+            }
+            return covMatrix;
+        }
+        
+
         static void Main(string[] args)
         {
             // header
@@ -66,8 +123,8 @@ namespace SystematicStrategies.main
 
             // sample data
             SimulatedDataFeedProvider sdf = new SimulatedDataFeedProvider();
-            string[] ids = new string[] { "AC FP", "ACA FP" };
-            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2000, 01, 05), new DateTime(2021,12,30));
+            string[] ids = new string[] { "AC FP", "ACA FP" ,"bim"};
+            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2000, 01, 05), new DateTime(2041,12,30));
             int nbValues = dfList.Count;
             double[] portfolioreturns = new double[nbValues];
 
@@ -90,35 +147,16 @@ namespace SystematicStrategies.main
             }
             Console.WriteLine(vol[0] );
 
-            double[,] covportfolioreturns = new double[dfList.Count, ids.Length];
+            double[,] covportfolioreturns = GetReturns(dfList, ids);
 
-            int dataSize = covportfolioreturns.GetLength(0);
-            int nbAssets = covportfolioreturns.GetLength(1);
+            double[,] covMatrix = computeCovarianceMatrix(covportfolioreturns);
 
-            for (int i = 1; i < dataSize; i++)
-            {
-                for (int j = 0; j < nbAssets; j++)
-                {
-                    double log = (double)dfList[i].PriceList[ids[j]] - (double)dfList[i - 1].PriceList[ids[j]];
-                    covportfolioreturns[i, j] = log;
-                }
-            }
+            double[,] covMatrixUpdate = Update(covMatrix, sdf.NumberOfDaysPerYear);
 
-            double[,] covMatrix = new double[nbAssets, nbAssets];
-
-            info = 0;
-            res = WREmodelingCov(ref dataSize, ref nbAssets, covportfolioreturns, covMatrix, ref info);
-            if (res != 0)
-            {
-                if (res < 0)
-                    throw new Exception("ERROR: WREmodelingCov encountred a problem. See info parameter for more details");
-                else
-                    throw new Exception("WARNING: WREmodelingCov encountred a problem. See info parameter for more details");
-            }
 
             dispMatrix(covMatrix);
 
-            dispMatrix(computeCovarianceMatrix(covportfolioreturns));
+
 
             Console.ReadLine();
 
