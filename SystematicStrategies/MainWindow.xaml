@@ -43,7 +43,8 @@
             <TextBox IsReadOnly="True" x:Name="ErrorMessage" Text="{Binding ErrorMessage, Mode=OneWay}" Width="750"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay}" Width="750"></TextBox>
+            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay}" Width="350"></TextBox>
+            <TextBox IsReadOnly="True" x:Name="OptionInfos" Text="{Binding Infos, Mode=OneWay}" Width="350"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
             <ContentControl ContentTemplate="{StaticResource ChartViewTemplate}" Content="{Binding ChartVM}" />

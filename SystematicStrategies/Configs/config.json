@@ -1,20 +1,134 @@
-{
-  "type": "BasketViewModel",
-  "name": "VCall",
-  "strike": 10,
-  "underlyingShares": [
-    {
-      "Id": "AC FP",
-      "Name": "AC FP"
-    },
-    {
-      "Id": "ACA FP",
-      "Name": "ACA FP"
-    }
-  ],
-  "weights": [ 0.5 , 0.5],
-  "startDate": "2010-05-13T00:00:00.000Z",
-  "maturity": "2012-05-17T00:00:00.000Z",
-  "estimatedWindowSize": 1,
-  "dataType": "SimulatedData"
-}
+[
+  {
+    "type": "VanillaCall",
+    "name": "Call vanille 1",
+    "strike": 10,
+    "underlyingShares": [
+      {
+        "Id": "CA FP",
+        "Name": "CA FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2011-03-11T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "SemiHistoricData"
+  },
+  {
+    "type": "VanillaCall",
+    "name": "Call vanille 2",
+    "strike": 10,
+    "underlyingShares": [
+      {
+        "Id": "EN FP",
+        "Name": "EN FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2180-02-02T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "SimulatedData"
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier 1",
+    "strike": 9,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "BN FP",
+        "Name": "BN FP"
+      },
+      {
+        "Id": "CAP FP",
+        "Name": "CAP FP"
+      }
+    ],
+    "weights": [ 0.3, 0.3, 0.4 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2013-06-11T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "SemiHistoricData"
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier 2",
+    "strike": 11,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "BN FP",
+        "Name": "BN FP"
+      },
+      {
+        "Id": "CAP FP",
+        "Name": "CAP FP"
+      }
+    ],
+    "weights": [ 0.3, 0.3, 0.4 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2013-06-11T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "SemiHistoricData"
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier 3",
+    "strike": 41,
+    "underlyingShares": [
+      {
+        "Id": "AC FP",
+        "Name": "AC FP"
+      },
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "CA FP",
+        "Name": "CA FP"
+      },
+      {
+        "Id": "EN FP",
+        "Name": "EN FP"
+      }
+    ],
+    "weights": [ 0.25, 0.25, 0.25, 0.25 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2010-04-14T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "HistoricData"
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier 4",
+    "strike": 9,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "BN FP",
+        "Name": "BN FP"
+      },
+      {
+        "Id": "CAP FP",
+        "Name": "CAP FP"
+      }
+    ],
+    "weights": [ 0.3, 0.3, 0.4 ],
+    "startDate": "2010-05-13T00:00:00.000Z",
+    "maturity": "2030-05-20T00:00:00.000Z",
+    "estimatedWindowSize": 1,
+    "dataType": "SimulatedData"
+  }
+]

@@ -14,5 +14,7 @@ namespace SystematicStrategies.Models
         public DateTime maturity;
         public int estimatedWindowSize;
         public string dataType;
+
+        public string Name => name;
     }
 }

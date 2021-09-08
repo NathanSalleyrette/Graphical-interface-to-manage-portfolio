@@ -28,13 +28,12 @@ namespace SystematicStrategies
         private bool controllerStarted;
         private string _result = "Résultat en attente";
         private string errorMessage = "";
+        private string infos = "";
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
-        private Config config = null;
+        private Config configVM;
         private DateTime startDate;
         private DateTime endDate;
-/*        private DateTime startDateDisplay;
-        private DateTime endDateDisplay;*/
         private Dictionary<string, IDataViewModel> AvailableDataFeedProviderDic;
 
         public MainWindowViewModel()
@@ -45,21 +44,21 @@ namespace SystematicStrategies
             var dataService = new DataService();
             AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
+            var configService = new ConfigService();
+            AvailableConfigs = configService.GetAvailableConfigs();
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
-            string startupPath = "Configs/config.json";
-            string text = System.IO.File.ReadAllText(startupPath);
-            Console.WriteLine(text);
-            config = JsonConvert.DeserializeObject<Config>(text);
-            StartDate = config.startDate;
-            EndDate = config.maturity;
-            /*StartDateDisplay = config.startDate;
-            EndDateDisplay = config.maturity;*/
-            dataVM = AvailableDataFeedProviderDic[config.dataType];
+            configVM = AvailableConfigs.First();
+            StartDate = configVM.startDate;
+            EndDate = configVM.maturity;
+            dataVM = AvailableDataFeedProviderDic[configVM.dataType];
+            infos = configInfos(configVM);
             ControllerStarted = false;
         }
 
         public List<IDataViewModel> AvailableDataFeedProvider { get; }
+
+        public List<Config> AvailableConfigs { get; }
 
         public List<IOptionViewModel> AvailableOptions { get; }
 
@@ -68,7 +67,6 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref startDate, value);
-                config.startDate = startDate;
                 StartCommand.RaiseCanExecuteChanged();
                 SaveConfigCommand.RaiseCanExecuteChanged();
 
@@ -80,7 +78,6 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref endDate, value);
-                config.maturity = endDate;
                 StartCommand.RaiseCanExecuteChanged();
                 SaveConfigCommand.RaiseCanExecuteChanged();
             }
@@ -110,7 +107,6 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref dataVM, value);
-                config.dataType = AvailableDataFeedProviderDic.FirstOrDefault(x => x.Value == dataVM).Key;
                 StartCommand.RaiseCanExecuteChanged();
                 SaveConfigCommand.RaiseCanExecuteChanged();
             }
@@ -122,6 +118,20 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref optionVM, value);
+            }
+        }
+
+        public Config ConfigVM
+        {
+            get { return configVM; }
+            set
+            {
+                SetProperty(ref configVM, value);
+                Infos = configInfos(configVM);
+                StartDate = value.startDate;
+                EndDate = value.maturity;
+                DataVM = AvailableDataFeedProviderDic[value.dataType];
+
             }
         }
 
@@ -141,6 +151,20 @@ namespace SystematicStrategies
                     SetProperty(ref _result, value);
                 }
 
+            }
+
+        }
+
+        public string Infos
+        {
+            get
+            {
+                return infos;
+            }
+
+            set
+            {
+                SetProperty(ref infos, value);
             }
 
         }
@@ -195,8 +219,8 @@ namespace SystematicStrategies
         private void StartController()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var type = assembly.GetTypes().First(t => t.Name == config.type);
-            optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, LastDate, config.strike });
+            var type = assembly.GetTypes().First(t => t.Name == (configVM.type + "ViewModel"));
+            optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { configVM.name, configVM.underlyingShares, configVM.weights, EndDate, configVM.strike });
             controller = dataVM.ControllerData;
             controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 3);
             controller.Start();
@@ -217,7 +241,7 @@ namespace SystematicStrategies
 
         private void SaveConfigController()
         {
-            string json = JsonConvert.SerializeObject(config);
+            string json = JsonConvert.SerializeObject(configVM);
             Console.Write(json);
             File.WriteAllText(@"Configs\path.json", json);
 
@@ -241,7 +265,7 @@ namespace SystematicStrategies
             DateTime firstDateHistoric = new DateTime(2010, 01, 01);
             DateTime lastDateHistoric = new DateTime(2015, 08, 20);
             List<System.DayOfWeek> weekEndDays = new List<System.DayOfWeek>() { DayOfWeek.Sunday, DayOfWeek.Saturday };
-            if(!weekEndDays.Contains(StartDate.DayOfWeek) & !weekEndDays.Contains(EndDate.DayOfWeek) & ((StartDate >= firstDate & EndDate <= lastDate & config.dataType == "SemiHistoricData") | (StartDate >= firstDateHistoric & EndDate <= lastDateHistoric & config.dataType == "HistoricData") | config.dataType == "SimulatedData" ) & StartDate < EndDate)
+            if(!weekEndDays.Contains(StartDate.DayOfWeek) & !weekEndDays.Contains(EndDate.DayOfWeek) & ((StartDate >= firstDate & EndDate <= lastDate & configVM.dataType == "SemiHistoricData") | (StartDate >= firstDateHistoric & EndDate <= lastDateHistoric & configVM.dataType == "HistoricData") | configVM.dataType == "SimulatedData" ) & StartDate < EndDate)
             {
                 ErrorMessage = "";
                 return true;
@@ -251,6 +275,19 @@ namespace SystematicStrategies
                 ErrorMessage = "Erreur: Dates choisies invalides";
                 return false;
             }
+        }
+
+        private string configInfos(Config config)
+        {
+            string res = "Infos sur l'option :\n";
+            res += "Strike : " + config.strike + "\n";
+            res += "Actions sous-jacentes : ";
+            var i = 0;
+            foreach(Share share in config.underlyingShares)
+            {
+                res += share.Name + " (" + config.weights[i] + ") / ";
+            }
+            return res;
         }
     }
 }
