@@ -138,7 +138,6 @@
       <DependentUpon>DataClasses1.dbml</DependentUpon>
     </Compile>
     <Compile Include="Historique\HistoricDataManager.cs" />
-    <Compile Include="Historique\IDataManger.cs" />
     <Compile Include="Models\Chart.cs" />
     <Compile Include="Models\ChartSpot.cs" />
     <Compile Include="Models\Config.cs" />
@@ -151,7 +150,6 @@
     <Compile Include="Strategies\BasketNeutralStrategy.cs" />
     <Compile Include="Strategies\AbstractDeltaNeutralStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Strategies\UniformStrategy.cs" />
     <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Strategies\VanillaNeutralStrategy.cs" />
     <Compile Include="ViewModels\ChartViewModel.cs" />

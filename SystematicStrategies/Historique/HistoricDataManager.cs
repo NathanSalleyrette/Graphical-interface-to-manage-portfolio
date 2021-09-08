@@ -8,7 +8,7 @@ using SystematicStrategies.Historique;
 
 namespace SystematicStrategies.DataManager
 {
-    class HistoricDataManager : IDataManager, IDataFeedProvider
+    class HistoricDataManager :  IDataFeedProvider
     {
         public DateTime MinDate { get; }
 
@@ -55,25 +55,6 @@ namespace SystematicStrategies.DataManager
 
         }
 
-        public List<DataFeed> GetWindow(int numberOfDays, DataFeed[] globalMarket, DateTime end)
-        {
-            DataFeed[] window = { };
-
-            int indexOfDate = 0;
-
-            while (indexOfDate < globalMarket.Length & globalMarket[indexOfDate].Date != end)
-            {
-                indexOfDate++;
-            }
-
-            if (indexOfDate < numberOfDays)
-            {
-                return globalMarket.Take(indexOfDate).ToList();
-            }
-            else
-            {
-                return globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays).ToList();
-            }
-        }
+       
     }
 }

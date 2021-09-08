@@ -19,30 +19,25 @@ namespace SystematicStrategies.Portfolio
 
 
         public abstract void Initialize(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double[] volatilities, double[,] corMatrix);
-        public void Update(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate, double[] volatilities, double[,] corMatrix)
+        public void Update(IOption option, IStrategy strategy, DataFeed dataFeed, List<DataFeed> dataFeedList, int nbOfDaysPerYear, double riskRate, double[] volatilities, double[,] corMatrix, bool rebalancing)
         {
             
             value = investmentFreeRiskRate * riskRate;
-            Console.Write("Portofolio value : ");
-            Console.WriteLine(value);
-            Console.Write("investment freeRisk");
-            Console.WriteLine(investmentFreeRiskRate);
-            foreach(var id in assetWeights.Keys)
-            {
-                Console.Write(id, " : ");
-                Console.WriteLine(dataFeed.PriceList[id]);
 
-            }
-            Console.WriteLine(string.Join(Environment.NewLine, assetWeights));
             foreach (var asset in assetWeights.Keys)
             {
                 value += assetWeights[asset] * (double)dataFeed.PriceList[asset];
             }
-            assetWeights = strategy.UpdateCompo(option, dataFeed, dataFeedList, nbOfDaysPerYear, volatilities, corMatrix);
-            investmentFreeRiskRate = value;
-            foreach (var asset in assetWeights.Keys)
+            var weights = strategy.UpdateCompo(option, dataFeed, dataFeedList, nbOfDaysPerYear, volatilities, corMatrix);
+
+            if (rebalancing)
             {
-                investmentFreeRiskRate -= assetWeights[asset] * (double)dataFeed.PriceList[asset];
+                assetWeights = weights;
+                investmentFreeRiskRate = value;
+                foreach (var asset in assetWeights.Keys)
+                {
+                    investmentFreeRiskRate -= assetWeights[asset] * (double)dataFeed.PriceList[asset];
+                }
             }
         }
     }
