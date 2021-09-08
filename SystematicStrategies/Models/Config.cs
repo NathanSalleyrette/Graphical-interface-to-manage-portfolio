@@ -15,6 +15,7 @@ namespace SystematicStrategies.Models
         public int estimatedWindowSize;
         public string dataType;
         public bool isEstimated;
+        public int rebalancingRate;
         public string Name => name;
     }
 }

@@ -20,6 +20,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using Newtonsoft.Json;
 using SystematicStrategies.ViewModels.EstimationViewModels.cs;
+using PricingLibrary.Utilities;
 
 namespace SystematicStrategies
 {
@@ -33,6 +34,8 @@ namespace SystematicStrategies
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
         private IEstimationViewModel controllerVM;
+        private int windowSizeVM;
+        private int rebalancingRateVM;
         private Config configVM;
         private DateTime startDate;
         private DateTime endDate;
@@ -42,7 +45,6 @@ namespace SystematicStrategies
         {
             StartCommand = new DelegateCommand(StartController, CanStartController);
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
-            SaveConfigCommand = new DelegateCommand(SaveConfigController, CanStartController);
             var dataService = new DataService();
             var estimationService = new EstimationService();
             AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
@@ -53,7 +55,9 @@ namespace SystematicStrategies
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
             configVM = AvailableConfigs.First();
-            controllerVM = AvailableEstimationProvider.First();
+            controllerVM = configVM.isEstimated? AvailableEstimationProvider.First() : AvailableEstimationProvider.Last();
+            windowSizeVM = configVM.estimatedWindowSize;
+            rebalancingRateVM = configVM.rebalancingRate;
             StartDate = configVM.startDate;
             EndDate = configVM.maturity;
             dataVM = AvailableDataFeedProviderDic[configVM.dataType];
@@ -74,8 +78,6 @@ namespace SystematicStrategies
             {
                 SetProperty(ref startDate, value);
                 StartCommand.RaiseCanExecuteChanged();
-                SaveConfigCommand.RaiseCanExecuteChanged();
-
             }
         }
 
@@ -87,7 +89,6 @@ namespace SystematicStrategies
                 configVM.maturity = endDate;
                 configInfos();
                 StartCommand.RaiseCanExecuteChanged();
-                SaveConfigCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -97,6 +98,8 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref controllerVM, value);
+                configVM.isEstimated = controllerVM is EstimationViewModel;
+                configInfos();
             }
         }
 
@@ -106,9 +109,12 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref dataVM, value);
+                if (dataVM is HistoricDataViewModel)
+                {
+                    ControllerVM = AvailableEstimationProvider.First();
+                }
                 configInfos();
                 StartCommand.RaiseCanExecuteChanged();
-                SaveConfigCommand.RaiseCanExecuteChanged(); 
             }
         }
 
@@ -121,6 +127,30 @@ namespace SystematicStrategies
             }
         }
 
+        public int WindowSizeVM
+        {
+            get { return windowSizeVM; }
+            set
+            {
+                SetProperty(ref windowSizeVM, value);
+                configVM.estimatedWindowSize = windowSizeVM;
+                configInfos();
+                StartCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public int RebalancingRateVM
+        {
+            get { return rebalancingRateVM; }
+            set
+            {
+                SetProperty(ref rebalancingRateVM, value);
+                configVM.rebalancingRate = rebalancingRateVM;
+                configInfos();
+                StartCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         public Config ConfigVM
         {
             get { return configVM; }
@@ -128,6 +158,9 @@ namespace SystematicStrategies
             {
                 SetProperty(ref configVM, value);
                 configInfos();
+                ControllerVM = configVM.isEstimated ? AvailableEstimationProvider.First() : AvailableEstimationProvider.Last();
+                WindowSizeVM = configVM.estimatedWindowSize;
+                RebalancingRateVM = configVM.rebalancingRate;
                 StartDate = value.startDate;
                 EndDate = value.maturity;
                 DataVM = AvailableDataFeedProviderDic[value.dataType];
@@ -199,7 +232,6 @@ namespace SystematicStrategies
             {
                 SetProperty(ref controllerStarted, value);
                 StartCommand.RaiseCanExecuteChanged();
-                SaveConfigCommand.RaiseCanExecuteChanged();
                 ResetCommand.RaiseCanExecuteChanged();
             }
         }
@@ -212,13 +244,19 @@ namespace SystematicStrategies
             var type = assembly.GetTypes().First(t => t.Name == (configVM.type + "ViewModel"));
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { configVM.name, configVM.underlyingShares, configVM.weights, EndDate, configVM.strike });
             controller = controllerVM.Controller;
-            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 100);
+            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, windowSizeVM, rebalancingRateVM);
             controller.Start();
             ControllerStarted = true;
             Result = controller.ResultToString();
             Result += "\n" + "Date du début : " + startDate.ToString();
             Result += "\n" + "Date de fin : " + endDate.ToString();
-            ChartVM.Maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+            if (controller.portfolioValues.Count < 10000)
+            {
+                ChartVM.Maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+            }
+            else {
+                ErrorMessage = "Soucis: Taille du jeu de données trop élevée pour afficher un graphe";
+            }
 
         }
 
@@ -229,22 +267,14 @@ namespace SystematicStrategies
             Result = "Résultat en attente";
         }
 
-        private void SaveConfigController()
-        {
-            string json = JsonConvert.SerializeObject(configVM);
-            Console.Write(json);
-            File.WriteAllText(@"Configs\path.json", json);
-
-        }
-
         private bool CanStartController()
         {
-            return !controllerStarted & VerifyDate();
+            return !ControllerStarted & VerifyDate();
         }
 
         private bool CanStopController()
         {
-            return controllerStarted;
+            return ControllerStarted;
         }
 
 
@@ -255,15 +285,29 @@ namespace SystematicStrategies
             DateTime firstDateHistoric = new DateTime(2010, 01, 01);
             DateTime lastDateHistoric = new DateTime(2015, 08, 20);
             List<System.DayOfWeek> weekEndDays = new List<System.DayOfWeek>() { DayOfWeek.Sunday, DayOfWeek.Saturday };
-            if(!weekEndDays.Contains(StartDate.DayOfWeek) & !weekEndDays.Contains(EndDate.DayOfWeek) & ((StartDate >= firstDate & EndDate <= lastDate & configVM.dataType == "SemiHistoricData") | (StartDate >= firstDateHistoric & EndDate <= lastDateHistoric & configVM.dataType == "HistoricData") | configVM.dataType == "SimulatedData" ) & StartDate < EndDate)
+            if (!(!weekEndDays.Contains(StartDate.DayOfWeek) & !weekEndDays.Contains(EndDate.DayOfWeek) & ((StartDate >= firstDate & EndDate <= lastDate & configVM.dataType == "SemiHistoricData") | (StartDate >= firstDateHistoric & EndDate <= lastDateHistoric & configVM.dataType == "HistoricData") | configVM.dataType == "SimulatedData") & StartDate < EndDate))
             {
-                ErrorMessage = "";
+                ErrorMessage = "Erreur: Dates choisies invalides";
+                return false;
+            }
+            else if (DayCount.CountBusinessDays(StartDate, EndDate) < WindowSizeVM)
+            {
+                ErrorMessage = "Erreur: Problème sur la taille de la fenêtre d'estimation";
+                return false;
+            }
+            else if (DayCount.CountBusinessDays(StartDate, EndDate) < RebalancingRateVM)
+            {
+                ErrorMessage = "Erreur: Problème sur la taille de l'intervalle de rebalancement";
+                return false;
+            }
+            else if (ControllerStarted)
+            {
                 return true;
             }
             else
             {
-                ErrorMessage = "Erreur: Dates choisies invalides";
-                return false;
+                ErrorMessage = "";
+                return true;
             }
         }
 
@@ -280,7 +324,8 @@ namespace SystematicStrategies
             }
             res += "\nData type : " + dataVM.Name + "\n";
             res += "Is estimated : " + configVM.isEstimated + "\n";
-            res += "Window size : " + configVM.estimatedWindowSize;
+            res += "Window size : " + configVM.estimatedWindowSize + "\n";
+            res += "Rebalancing rate : " + configVM.rebalancingRate;
             Infos = res;
         }
     }

@@ -12,7 +12,7 @@ using System.Linq;
 namespace SystematicStrategies
 {
 
-    internal class ControllerHistoric : AbstractController
+    internal class ControllerHistoricViewModel : AbstractController
     {
 
         public override void CalculVolatilities()

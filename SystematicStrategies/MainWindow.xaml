@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SystematicStrategies" d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
         xmlns:views="clr-namespace:SystematicStrategies.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1500">
     <Window.Resources>
         <DataTemplate x:Key="SelectionViewTemplate">
             <views:SelectionView />
@@ -20,7 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
             <RowDefinition Height="1*" />
-            <RowDefinition Height="4*" />
+            <RowDefinition Height="4.5*" />
             <RowDefinition Height="10*" />
 
         </Grid.RowDefinitions>
@@ -34,9 +34,24 @@
         <StackPanel Grid.Column="1" Orientation="Horizontal">
             <DatePicker SelectedDate="{Binding StartDate}"></DatePicker>
             <DatePicker SelectedDate="{Binding EndDate}"></DatePicker>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="RebalancingRate" Margin="5,5,5,0"/>
+                <TextBox Grid.Row="1" Name="TB1" Text="{Binding RebalancingRateVM, Mode=TwoWay}" Margin="5"/>
+            </Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="WindowSize" Margin="5,5,5,0"/>
+                <TextBox Grid.Row="1" Name="TB2" Text="{Binding WindowSizeVM, Mode=TwoWay}" Margin="5"/>
+            </Grid>
             <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
             <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
-            <Button Command="{Binding SaveConfigCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Save Config</Button>
             <ContentControl ContentTemplate="{StaticResource SelectionViewTemplate}" Content="{Binding}" />
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">

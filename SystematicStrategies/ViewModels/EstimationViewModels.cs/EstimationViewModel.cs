@@ -12,7 +12,7 @@ namespace SystematicStrategies.ViewModels.EstimationViewModels.cs
 
         public EstimationViewModel()
         {
-            controller = new ControllerHistoric();
+            controller = new ControllerHistoricViewModel();
         }
 
         public AbstractController Controller
