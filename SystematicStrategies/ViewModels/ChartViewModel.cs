@@ -50,7 +50,7 @@ namespace SystematicStrategies.ViewModels
             }
         }
 
-        public void reset()
+        public void Reset()
         {
             foreach(var collection in SeriesCollection)
             {
@@ -62,7 +62,7 @@ namespace SystematicStrategies.ViewModels
 
  
 
-        public void maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
+        public void Maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
         {
             Labels = dateLabels;
             SeriesCollection = new SeriesCollection

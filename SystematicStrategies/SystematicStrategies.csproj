@@ -147,7 +147,6 @@
     <Compile Include="Portfolio\PortfolioVanilla.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Strategies\BasketNeutralStrategy.cs" />
-    <Compile Include="Strategies\DeltaNeutralStrategy.cs" />
     <Compile Include="Strategies\AbstractDeltaNeutralStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
     <Compile Include="Strategies\UniformStrategy.cs" />

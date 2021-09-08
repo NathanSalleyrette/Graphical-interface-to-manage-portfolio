@@ -24,24 +24,6 @@ namespace SystematicStrategies.Models
 
         }
 
-        //public void maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
-        //{
-        //    Labels = dateLabels;
-        //    SeriesCollection = new SeriesCollection
-        //    {
-        //        new LineSeries
-        //        {
-        //            Title = "Option",
-        //            Values = new ChartValues<double>(optionPrices)
 
-        //        },
-        //        new LineSeries
-        //        {
-        //            Title = "Portfolio",
-        //            Values = new ChartValues<double>(portfolioValues),
-        //            PointGeometry = null
-        //        }
-        //    };
-        //}
     }
 }

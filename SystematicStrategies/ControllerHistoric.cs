@@ -7,8 +7,6 @@ using SystematicStrategies.Portfolio;
 using SystematicStrategies.Strategies;
 using SystematicStrategies.ViewModels.DataViewModels;
 using SystematicStrategies.Estimators;
-using SystematicStrategies.DataManager;
-using SystematicStrategies.Historique;
 using System.Linq;
 
 namespace SystematicStrategies
@@ -27,6 +25,7 @@ namespace SystematicStrategies
             var window = GetWindow(windowSize, dataFeedList, dayOfController);
             if (n > 1) corMatrix = est.CovMatrix(window, optionToHedge.UnderlyingShareIds, dataFeedProvider.NumberOfDaysPerYear);
             else corMatrix = new double[,] { { volatilities[0]} };
+            est.DispMatrix(corMatrix);
         }
 
         public List<DataFeed> GetWindow(int numberOfDays, List<DataFeed> globalMarket, DateTime end)
@@ -42,13 +41,19 @@ namespace SystematicStrategies
 
             if (indexOfDate < numberOfDays)
             {
-                return globalMarket.Take(indexOfDate).ToList();
+                return globalMarket.Take(indexOfDate+1).ToList();
             }
             else
             {
-                return globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays).ToList();
+                return globalMarket.Skip(indexOfDate - numberOfDays).Take(numberOfDays+1).ToList();
             }
         }
+
+        public override int WindowSizeSetter(int windowSize)
+        {
+            return windowSize;
+        }
+
 
     }
 }

@@ -22,10 +22,16 @@ namespace SystematicStrategies
             foreach (string UnderlyingShareId in optionToHedge.UnderlyingShareIds)
             {
                 volatilities[i] = 0.25;
-                corMatrix[i, i] = 0.25;
+                corMatrix[i, i] = 1;
                 i += 1;
             };
         }
-       
+
+        public override int WindowSizeSetter(int windowSize)
+        {
+            return 1;
+        }
+
+
     }
 }

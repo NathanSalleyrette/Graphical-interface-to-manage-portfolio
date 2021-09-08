@@ -199,17 +199,18 @@ namespace SystematicStrategies
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, LastDate, config.strike });
             controller = dataVM.ControllerData;
             controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 3);
-            controller.start();
+            controller.Start();
             ControllerStarted = true;
             Result = controller.ResultToString();
             Result += "\n" + "Date du début : " + startDate.ToString();
             Result += "\n" + "Date de fin : " + endDate.ToString();
-            ChartVM.maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+            ChartVM.Maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+
         }
 
         private void ResetController()
         {
-            ChartVM.reset();
+            ChartVM.Reset();
             ControllerStarted = false;
             Result = "Résultat en attente";
         }

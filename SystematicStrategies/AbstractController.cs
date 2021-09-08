@@ -25,9 +25,9 @@ namespace SystematicStrategies
         public int windowSize;
         public DateTime dayOfController;
 
-        public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, int windowSize)
+        public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, int expectedWindowSize)
         {
-            this.windowSize = windowSize;
+            this.windowSize = WindowSizeSetter(expectedWindowSize);
             this.dataFeedProvider = dataFeedProvider;
             optionToHedge = option.Option;
             var n = optionToHedge.UnderlyingShareIds.Length;
@@ -35,33 +35,44 @@ namespace SystematicStrategies
             corMatrix = new double[n, n];
 
             dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
-            //dayOfController = dataFeedList[2].Date;
-            dayOfController = startDate;
+            dayOfController = dataFeedList[windowSize-1].Date;
+            //dayOfController = startDate;
             CalculVolatilities();
 
-            dateLabels = new string[dataFeedList.Count];
-            var i = 0;
-            foreach (var dataFeed in dataFeedList)
+            dateLabels = new string[dataFeedList.Count - windowSize + 1];
+            //var i = 0;
+            //foreach (var dataFeed in dataFeedList)
+            //{
+            //    dateLabels[i] = dataFeed.Date.ToString();
+            //    i += 1;
+            //}
+            
+            for (int i = 0; i < dataFeedList.Count - windowSize + 1; i++)
             {
-                dateLabels[i] = dataFeed.Date.ToString();
-                i += 1;
+                dateLabels[i] = dataFeedList[i + windowSize - 1].Date.ToString();
             }
+            
             optionPrices = new List<double>() { };
             portfolioValues = new List<double>() { };
             this.strategy = option.Strategy;
             this.portfolio = option.Portfolio;
             portfolio.Initialize(optionToHedge, strategy, dataFeedList[0], dataFeedList, dataFeedProvider.NumberOfDaysPerYear, volatilities, corMatrix);
-            optionPrices.Add(this.strategy.optionPrice);
+            optionPrices.Add(this.strategy.OptionPrice);
             portfolioValues.Add(portfolio.value);
         }
 
         public abstract void CalculVolatilities();
 
-        public void start()
+        public abstract int WindowSizeSetter(int windowSize);
+
+        public void Start()
         {
             DateTime lastUpdate = dataFeedList[0].Date;
-            foreach (DataFeed dataFeed in dataFeedList)
+            DataFeed dataFeed;
+
+            for (int i = windowSize; i < dataFeedList.Count; i++)
             {
+                dataFeed = dataFeedList[i];
                 dayOfController = dataFeed.Date;
                 double dayCount = DayCount.CountBusinessDays(lastUpdate, dataFeed.Date);
                 double riskRate = RiskFreeRateProvider.GetRiskFreeRateAccruedValue(dayCount / dataFeedProvider.NumberOfDaysPerYear);
@@ -69,15 +80,9 @@ namespace SystematicStrategies
                 portfolio.Update(optionToHedge, strategy, dataFeed, dataFeedList, dataFeedProvider.NumberOfDaysPerYear, riskRate, volatilities, corMatrix);
                 lastUpdate = dataFeed.Date;
                 payoff = optionToHedge.GetPayoff(dataFeed.PriceList);
-                optionPrices.Add(strategy.optionPrice);
+                optionPrices.Add(strategy.OptionPrice);
                 portfolioValues.Add(portfolio.value);
             }
-            Console.WriteLine(portfolio.value);
-            Console.WriteLine(payoff);
-            Console.WriteLine(strategy.optionPrice);
-            Console.WriteLine(optionPrices[0]);
-            double trackingError = (portfolio.value - payoff) / optionPrices[0];
-            Console.WriteLine(trackingError);
         }
 
         public string ResultToString()
@@ -85,7 +90,7 @@ namespace SystematicStrategies
             string result = "";
             result += "Valeur du portefeuille : " + portfolio.value + "\n"
                 + "Payoff : " + payoff + "\n"
-                + "Prix de l'option : " + strategy.optionPrice + "\n";
+                + "Prix de l'option : " + strategy.OptionPrice + "\n";
             double trackingError = (portfolio.value - payoff) / optionPrices[0];
             result += "TrackingError : " + trackingError;
             return result;

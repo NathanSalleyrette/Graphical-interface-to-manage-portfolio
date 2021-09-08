@@ -124,7 +124,7 @@ namespace SystematicStrategies.main
             // sample data
             SimulatedDataFeedProvider sdf = new SimulatedDataFeedProvider();
             string[] ids = new string[] { "AC FP", "ACA FP" ,"bim"};
-            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2000, 01, 05), new DateTime(2041,12,30));
+            List<DataFeed> dfList = sdf.GetDataFeed(ids, new DateTime(2000, 01, 05), new DateTime(2000,04,25));
             int nbValues = dfList.Count;
             double[] portfolioreturns = new double[nbValues];
 

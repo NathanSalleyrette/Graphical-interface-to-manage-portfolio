@@ -62,7 +62,7 @@ namespace SystematicStrategies.Estimators
             return volatility[0];
         }
 
-        public static double[,] computeCovarianceMatrix(double[,] returns)
+        public static double[,] ComputeCovarianceMatrix(double[,] returns)
         {
             int dataSize = returns.GetLength(0);
             int nbAssets = returns.GetLength(1);
@@ -124,11 +124,26 @@ namespace SystematicStrategies.Estimators
         {
             double[,] covportfolioreturns = GetReturns(dfList, ids);
 
-            double[,] covMatrix = computeCovarianceMatrix(covportfolioreturns);
+            double[,] covMatrix = ComputeCovarianceMatrix(covportfolioreturns);
 
-            double[,] covMatrixUpdate = Update(covMatrix, numberOfDaysPerYear);
-            return covMatrixUpdate;
+            //double[,] covMatrixUpdate = Update(covMatrix, numberOfDaysPerYear);
+            return covMatrix;
 
+        }
+
+        public void DispMatrix(double[,] myCovMatrix)
+        {
+            int n = myCovMatrix.GetLength(0);
+
+            Console.WriteLine("Covariance matrix:");
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(myCovMatrix[i, j] + "\t");
+                }
+                Console.Write("\n");
+            }
         }
     }
 }
