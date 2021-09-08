@@ -35,8 +35,8 @@ namespace SystematicStrategies
             corMatrix = new double[n, n];
 
             dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
-            dayOfController = dataFeedList[2].Date;
-            //dayOfController = startDate;
+            //dayOfController = dataFeedList[2].Date;
+            dayOfController = startDate;
             CalculVolatilities();
 
             dateLabels = new string[dataFeedList.Count];
