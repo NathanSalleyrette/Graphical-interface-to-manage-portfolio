@@ -65,21 +65,20 @@ namespace SystematicStrategies.ViewModels
         public void Maj(List<double> optionPrices, List<double> portfolioValues, string[] dateLabels)
         {
             Labels = dateLabels;
-            SeriesCollection = new SeriesCollection
-            {
-                new LineSeries
-                {
-                    Title = "Option",
-                    Values = new ChartValues<double>(optionPrices)
+            SeriesCollection.Clear();
 
-                },
-                new LineSeries
-                {
-                    Title = "Portfolio",
-                    Values = new ChartValues<double>(portfolioValues),
-                    PointGeometry = null
-                }
-            };
+            SeriesCollection.Add(new LineSeries
+            {
+                Title = "Option",
+                Values = new ChartValues<double>(optionPrices)
+
+            });
+            SeriesCollection.Add(new LineSeries
+            {
+                Title = "Portfolio",
+                Values = new ChartValues<double>(portfolioValues)
+
+            });
         }
     }
 }

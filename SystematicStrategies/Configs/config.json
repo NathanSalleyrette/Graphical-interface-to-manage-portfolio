@@ -13,7 +13,8 @@
     "startDate": "2010-05-13T00:00:00.000Z",
     "maturity": "2011-03-11T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "SemiHistoricData"
+    "dataType": "SemiHistoricData",
+    "isEstimated": false
   },
   {
     "type": "VanillaCall",
@@ -29,7 +30,8 @@
     "startDate": "2010-05-13T00:00:00.000Z",
     "maturity": "2180-02-02T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "SimulatedData"
+    "dataType": "SimulatedData",
+    "isEstimated": false
   },
   {
     "type": "Basket",
@@ -53,7 +55,8 @@
     "startDate": "2010-05-13T00:00:00.000Z",
     "maturity": "2013-06-11T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "SemiHistoricData"
+    "dataType": "SemiHistoricData",
+    "isEstimated": false
   },
   {
     "type": "Basket",
@@ -77,7 +80,8 @@
     "startDate": "2010-05-13T00:00:00.000Z",
     "maturity": "2013-06-11T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "SemiHistoricData"
+    "dataType": "SemiHistoricData",
+    "isEstimated": false
   },
   {
     "type": "Basket",
@@ -105,7 +109,8 @@
     "startDate": "2010-05-13T00:00:00.000Z",
     "maturity": "2010-04-14T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "HistoricData"
+    "dataType": "HistoricData",
+    "isEstimated": false
   },
   {
     "type": "Basket",
@@ -127,8 +132,9 @@
     ],
     "weights": [ 0.3, 0.3, 0.4 ],
     "startDate": "2010-05-13T00:00:00.000Z",
-    "maturity": "2030-05-20T00:00:00.000Z",
+    "maturity": "2300-05-20T00:00:00.000Z",
     "estimatedWindowSize": 1,
-    "dataType": "SimulatedData"
+    "dataType": "SimulatedData",
+    "isEstimated": false
   }
 ]

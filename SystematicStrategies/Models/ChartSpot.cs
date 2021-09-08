@@ -17,11 +17,7 @@ namespace SystematicStrategies.Models
         public Func<double, string> YFormatter { get; set; }
         public ChartSpot()
         {
-
-            SeriesCollection = null;
-            Labels = null;
-            YFormatter = null;
-
+            SeriesCollection = new SeriesCollection();
         }
 
 

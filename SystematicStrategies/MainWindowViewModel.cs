@@ -52,7 +52,7 @@ namespace SystematicStrategies
             StartDate = configVM.startDate;
             EndDate = configVM.maturity;
             dataVM = AvailableDataFeedProviderDic[configVM.dataType];
-            infos = configInfos(configVM);
+            configInfos();
             ControllerStarted = false;
         }
 
@@ -78,6 +78,8 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref endDate, value);
+                configVM.maturity = endDate;
+                configInfos();
                 StartCommand.RaiseCanExecuteChanged();
                 SaveConfigCommand.RaiseCanExecuteChanged();
             }
@@ -107,8 +109,9 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref dataVM, value);
+                configInfos();
                 StartCommand.RaiseCanExecuteChanged();
-                SaveConfigCommand.RaiseCanExecuteChanged();
+                SaveConfigCommand.RaiseCanExecuteChanged(); 
             }
         }
 
@@ -127,7 +130,7 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref configVM, value);
-                Infos = configInfos(configVM);
+                configInfos();
                 StartDate = value.startDate;
                 EndDate = value.maturity;
                 DataVM = AvailableDataFeedProviderDic[value.dataType];
@@ -222,7 +225,7 @@ namespace SystematicStrategies
             var type = assembly.GetTypes().First(t => t.Name == (configVM.type + "ViewModel"));
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { configVM.name, configVM.underlyingShares, configVM.weights, EndDate, configVM.strike });
             controller = dataVM.ControllerData;
-            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 3);
+            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 100);
             controller.Start();
             ControllerStarted = true;
             Result = controller.ResultToString();
@@ -277,17 +280,21 @@ namespace SystematicStrategies
             }
         }
 
-        private string configInfos(Config config)
+        private void configInfos()
         {
             string res = "Infos sur l'option :\n";
-            res += "Strike : " + config.strike + "\n";
+            res += "Strike : " + configVM.strike + "\n";
+            res += "Maturity : " + configVM.maturity + "\n";
             res += "Actions sous-jacentes : ";
             var i = 0;
-            foreach(Share share in config.underlyingShares)
+            foreach(Share share in configVM.underlyingShares)
             {
-                res += share.Name + " (" + config.weights[i] + ") / ";
+                res += share.Name + " (" + configVM.weights[i] + ") ";
             }
-            return res;
+            res += "\nData type : " + dataVM.Name + "\n";
+            res += "Is estimated : " + configVM.isEstimated + "\n";
+            res += "Window size : " + configVM.estimatedWindowSize;
+            Infos = res;
         }
     }
 }
