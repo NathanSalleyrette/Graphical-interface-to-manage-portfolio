@@ -36,16 +36,10 @@ namespace SystematicStrategies
 
             dataFeedList = dataFeedProvider.GetDataFeed(option.Option.UnderlyingShareIds, startDate, endDate);
             dayOfController = dataFeedList[windowSize-1].Date;
-            //dayOfController = startDate;
             CalculVolatilities();
 
             dateLabels = new string[dataFeedList.Count - windowSize + 1];
-            //var i = 0;
-            //foreach (var dataFeed in dataFeedList)
-            //{
-            //    dateLabels[i] = dataFeed.Date.ToString();
-            //    i += 1;
-            //}
+
             
             for (int i = 0; i < dataFeedList.Count - windowSize + 1; i++)
             {

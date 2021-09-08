@@ -147,6 +147,7 @@
     <Compile Include="Portfolio\PortfolioVanilla.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\EstimationService.cs" />
     <Compile Include="Strategies\BasketNeutralStrategy.cs" />
     <Compile Include="Strategies\AbstractDeltaNeutralStrategy.cs" />
     <Compile Include="Strategies\IStrategy.cs" />
@@ -159,6 +160,9 @@
     <Compile Include="ViewModels\DataViewModels\SimulatedDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\SemiHistoricDataViewModel.cs" />
     <Compile Include="ViewModels\DataViewModels\IDataViewModel.cs" />
+    <Compile Include="ViewModels\EstimationViewModels.cs\EstimationViewModel.cs" />
+    <Compile Include="ViewModels\EstimationViewModels.cs\IEstimationViewModel.cs" />
+    <Compile Include="ViewModels\EstimationViewModels.cs\NoEstimationViewModel.cs" />
     <Compile Include="ViewModels\OptionViewModels\BasketViewModel.cs" />
     <Compile Include="ViewModels\OptionViewModels\VanillaCallViewModel.cs" />
     <Compile Include="ViewModels\OptionViewModels\IOptionViewModel.cs" />

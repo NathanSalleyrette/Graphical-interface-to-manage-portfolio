@@ -18,6 +18,8 @@ namespace SystematicStrategies
         public override void CalculVolatilities()
         {
             var n = optionToHedge.UnderlyingShareIds.Length;
+            var window = GetWindow(windowSize, dataFeedList, dayOfController);
+
             Estimator est = new Estimator();
             var window = GetWindow(windowSize, dataFeedList, dayOfController);
 

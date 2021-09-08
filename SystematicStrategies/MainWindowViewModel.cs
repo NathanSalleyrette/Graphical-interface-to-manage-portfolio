@@ -19,6 +19,7 @@ using SystematicStrategies.ViewModels;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using Newtonsoft.Json;
+using SystematicStrategies.ViewModels.EstimationViewModels.cs;
 
 namespace SystematicStrategies
 {
@@ -31,6 +32,7 @@ namespace SystematicStrategies
         private string infos = "";
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
+        private IEstimationViewModel controllerVM;
         private Config configVM;
         private DateTime startDate;
         private DateTime endDate;
@@ -42,13 +44,16 @@ namespace SystematicStrategies
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
             SaveConfigCommand = new DelegateCommand(SaveConfigController, CanStartController);
             var dataService = new DataService();
+            var estimationService = new EstimationService();
             AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
+            AvailableEstimationProvider = estimationService.GetAvailableEstimation();
             var configService = new ConfigService();
             AvailableConfigs = configService.GetAvailableConfigs();
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
             configVM = AvailableConfigs.First();
+            controllerVM = AvailableEstimationProvider.First();
             StartDate = configVM.startDate;
             EndDate = configVM.maturity;
             dataVM = AvailableDataFeedProviderDic[configVM.dataType];
@@ -56,6 +61,7 @@ namespace SystematicStrategies
             ControllerStarted = false;
         }
 
+        public List<IEstimationViewModel> AvailableEstimationProvider { get; }
         public List<IDataViewModel> AvailableDataFeedProvider { get; }
 
         public List<Config> AvailableConfigs { get; }
@@ -85,23 +91,14 @@ namespace SystematicStrategies
             }
         }
 
-        /*public DateTime StartDateDisplay
+        public IEstimationViewModel ControllerVM
         {
-            get { return startDateDisplay; }
+            get { return controllerVM; }
             set
             {
-                SetProperty(ref startDateDisplay, value);
+                SetProperty(ref controllerVM, value);
             }
         }
-
-        public DateTime EndDateDisplay
-        {
-            get { return endDateDisplay; }
-            set
-            {
-                SetProperty(ref endDateDisplay, value);
-            }
-        }*/
 
         public IDataViewModel DataVM
         {
@@ -189,16 +186,6 @@ namespace SystematicStrategies
 
         }
 
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        //private void NotifyPropertyChanged(string propertyName = "")
-        //{
-        //    if (PropertyChanged != null)
-        //    {
-        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        //    }
-        //}
-
         public DelegateCommand StartCommand { get; private set; }
 
         public DelegateCommand ResetCommand { get; private set; }
@@ -224,7 +211,7 @@ namespace SystematicStrategies
             var assembly = Assembly.GetExecutingAssembly();
             var type = assembly.GetTypes().First(t => t.Name == (configVM.type + "ViewModel"));
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { configVM.name, configVM.underlyingShares, configVM.weights, EndDate, configVM.strike });
-            controller = dataVM.ControllerData;
+            controller = controllerVM.Controller;
             controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 100);
             controller.Start();
             ControllerStarted = true;
