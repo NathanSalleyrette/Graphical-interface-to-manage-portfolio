@@ -196,7 +196,7 @@ namespace SystematicStrategies
         {
             var assembly = Assembly.GetExecutingAssembly();
             var type = assembly.GetTypes().First(t => t.Name == config.type);
-            optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, config.maturity, config.strike });
+            optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, LastDate, config.strike });
             controller = dataVM.ControllerData;
             controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 3);
             controller.start();
