@@ -12,10 +12,10 @@
     "weights": [ 1 ],
     "startDate": "2010-01-01T00:00:00.000Z",
     "maturity": "2011-03-11T00:00:00.000Z",
-    "estimatedWindowSize": 1,
+    "estimatedWindowSize": 100,
     "dataType": "SemiHistoricData",
     "isEstimated": false,
-    "rebalancingRate" :  1
+    "rebalancingRate": 1
   },
   {
     "type": "VanillaCall",
@@ -56,7 +56,7 @@
     "weights": [ 0.3, 0.3, 0.4 ],
     "startDate": "2010-01-01T00:00:00.000Z",
     "maturity": "2013-06-11T00:00:00.000Z",
-    "estimatedWindowSize": 1,
+    "estimatedWindowSize": 100,
     "dataType": "SemiHistoricData",
     "isEstimated": false,
     "rebalancingRate": 1
@@ -141,6 +141,180 @@
     "estimatedWindowSize": 100,
     "dataType": "SimulatedData",
     "isEstimated": true,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "VanillaCall",
+    "name": "Call vanille test strike 2",
+    "strike": 2,
+    "underlyingShares": [
+      {
+        "Id": "ACA FP",
+        "Name": "ACA FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2011-05-23T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "VanillaCall",
+    "name": "Call vanille test strike 10",
+    "strike": 10,
+    "underlyingShares": [
+      {
+        "Id": "ACA FP",
+        "Name": "ACA FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2011-05-23T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "VanillaCall",
+    "name": "Call vanille test strike 40",
+    "strike": 40,
+    "underlyingShares": [
+      {
+        "Id": "ACA FP",
+        "Name": "ACA FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2011-05-23T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier test strike 4",
+    "strike": 4,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "AC FP",
+        "Name": "AC FP"
+      },
+      {
+        "Id": "AIR FP",
+        "Name": "AIR FP"
+      },
+      {
+        "Id": "EDF FP",
+        "Name": "EDF FP"
+      },
+      {
+        "Id": "EN FP",
+        "Name": "EN FP"
+      }
+    ],
+    "weights": [ 0.1, 0.15, 0.25, 0.3, 0.2 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2013-06-11T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier test strike 10",
+    "strike": 10,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "AC FP",
+        "Name": "AC FP"
+      },
+      {
+        "Id": "AIR FP",
+        "Name": "AIR FP"
+      },
+      {
+        "Id": "EDF FP",
+        "Name": "EDF FP"
+      },
+      {
+        "Id": "EN FP",
+        "Name": "EN FP"
+      }
+    ],
+    "weights": [ 0.1, 0.15, 0.25, 0.3, 0.2 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2013-06-11T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "Basket",
+    "name": "Option panier test strike 50",
+    "strike": 50,
+    "underlyingShares": [
+      {
+        "Id": "AI FP",
+        "Name": "AI FP"
+      },
+      {
+        "Id": "AC FP",
+        "Name": "AC FP"
+      },
+      {
+        "Id": "AIR FP",
+        "Name": "AIR FP"
+      },
+      {
+        "Id": "EDF FP",
+        "Name": "EDF FP"
+      },
+      {
+        "Id": "EN FP",
+        "Name": "EN FP"
+      }
+    ],
+    "weights": [ 0.1, 0.15, 0.25, 0.3, 0.2 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2013-06-11T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
+    "rebalancingRate": 1
+  },
+  {
+    "type": "Basket",
+    "name": "Call panier 1 action test strike 10",
+    "strike": 10,
+    "underlyingShares": [
+      {
+        "Id": "ACA FP",
+        "Name": "ACA FP"
+      }
+    ],
+    "weights": [ 1 ],
+    "startDate": "2010-01-01T00:00:00.000Z",
+    "maturity": "2011-05-23T00:00:00.000Z",
+    "estimatedWindowSize": 100,
+    "dataType": "SemiHistoricData",
+    "isEstimated": false,
     "rebalancingRate": 1
   }
 ]
