@@ -21,7 +21,6 @@ namespace SystematicStrategies
             var window = GetWindow(windowSize, dataFeedList, dayOfController);
 
             Estimator est = new Estimator();
-            var window = GetWindow(windowSize, dataFeedList, dayOfController);
 
             for (int i = 0; i < n; i++) {
                 volatilities[i] = est.Volatity(window, dataFeedProvider.NumberOfDaysPerYear, optionToHedge.UnderlyingShareIds[i]);
