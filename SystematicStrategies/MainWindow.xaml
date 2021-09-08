@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:SystematicStrategies" d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
         xmlns:views="clr-namespace:SystematicStrategies.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1000">
     <Window.Resources>
         <DataTemplate x:Key="SelectionViewTemplate">
             <views:SelectionView />
@@ -19,7 +19,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="2*" />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="4*" />
             <RowDefinition Height="10*" />
 
         </Grid.RowDefinitions>
@@ -31,18 +32,20 @@
 
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <DatePicker SelectedDate="{Binding FirstDate}" DisplayDate="{Binding FirstDateDisplay}"></DatePicker>
-            <DatePicker SelectedDate="{Binding LastDate}" DisplayDate="{Binding LastDateDisplay}"></DatePicker>
+            <DatePicker SelectedDate="{Binding StartDate}"></DatePicker>
+            <DatePicker SelectedDate="{Binding EndDate}"></DatePicker>
             <Button Command="{Binding StartCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Start</Button>
             <Button Command="{Binding ResetCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Reset</Button>
             <Button Command="{Binding SaveConfigCommand}" VerticalAlignment="Center" Margin="10,5,10,5" Padding="5,2,5,2">Save Config</Button>
             <ContentControl ContentTemplate="{StaticResource SelectionViewTemplate}" Content="{Binding}" />
-
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay}" Width="530"></TextBox>
+            <TextBox IsReadOnly="True" x:Name="ErrorMessage" Text="{Binding ErrorMessage, Mode=OneWay}" Width="750"></TextBox>
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <TextBox IsReadOnly="True" x:Name="Result" Text="{Binding Result, Mode=OneWay}" Width="750"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
             <ContentControl ContentTemplate="{StaticResource ChartViewTemplate}" Content="{Binding ChartVM}" />
         </StackPanel>
 

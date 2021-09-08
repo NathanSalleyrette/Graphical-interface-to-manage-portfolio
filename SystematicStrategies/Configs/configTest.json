@@ -1,0 +1,1 @@
+{"type":"BasketViewModel","name":"VCall","strike":20.0,"underlyingShares":[{"Name":"AC FP","Id":"AC FP"}],"weights":[1.0],"startDate":"2010-05-13T00:00:00Z","maturity":"2012-05-17T00:00:00Z","estimatedWindowSize":1,"dataType":"SimulatedData"}

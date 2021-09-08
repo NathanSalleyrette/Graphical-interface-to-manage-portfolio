@@ -1,7 +1,7 @@
 {
   "type": "BasketViewModel",
   "name": "VCall",
-  "strike": 0,
+  "strike": 20,
   "underlyingShares": [
     {
       "Id": "AC FP",

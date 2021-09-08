@@ -11,7 +11,7 @@ namespace SystematicStrategies.Services
     {
         public Dictionary<string, IDataViewModel> GetAvailableDataFeedProvider()
         {
-            return new Dictionary<string, IDataViewModel>() { { "SemiHistoric", new SemiHistoricDataViewModel() }, { "SimulatedData", new SimulatedDataViewModel() }, { "HistoricData", new HistoricDataViewModel() } };
+            return new Dictionary<string, IDataViewModel>() { { "SemiHistoricData", new SemiHistoricDataViewModel() }, { "SimulatedData", new SimulatedDataViewModel() }, { "HistoricData", new HistoricDataViewModel() } };
         }
     }
 }

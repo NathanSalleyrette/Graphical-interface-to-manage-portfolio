@@ -27,13 +27,15 @@ namespace SystematicStrategies
         private AbstractController controller;
         private bool controllerStarted;
         private string _result = "Résultat en attente";
+        private string errorMessage = "";
         private IDataViewModel dataVM;
         private IOptionViewModel optionVM;
         private Config config = null;
-        private DateTime firstDate;
-        private DateTime lastDate;
-        private DateTime firstDateDisplay;
-        private DateTime lastDateDisplay;
+        private DateTime startDate;
+        private DateTime endDate;
+/*        private DateTime startDateDisplay;
+        private DateTime endDateDisplay;*/
+        private Dictionary<string, IDataViewModel> AvailableDataFeedProviderDic;
 
         public MainWindowViewModel()
         {
@@ -41,18 +43,18 @@ namespace SystematicStrategies
             ResetCommand = new DelegateCommand(ResetController, CanStopController);
             SaveConfigCommand = new DelegateCommand(SaveConfigController, CanStartController);
             var dataService = new DataService();
-            var AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
+            AvailableDataFeedProviderDic = dataService.GetAvailableDataFeedProvider();
             AvailableDataFeedProvider = AvailableDataFeedProviderDic.Values.ToList();
             ChartVM = new ChartViewModel();
             dataVM = AvailableDataFeedProvider.First();
-            string startupPath = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName, "SystematicStrategies/Configs/config.json");
+            string startupPath = "Configs/config.json";
             string text = System.IO.File.ReadAllText(startupPath);
             Console.WriteLine(text);
             config = JsonConvert.DeserializeObject<Config>(text);
-            FirstDate = config.startDate;
-            LastDate = config.maturity;
-            FirstDateDisplay = config.startDate;
-            LastDateDisplay = config.maturity;
+            StartDate = config.startDate;
+            EndDate = config.maturity;
+            /*StartDateDisplay = config.startDate;
+            EndDateDisplay = config.maturity;*/
             dataVM = AvailableDataFeedProviderDic[config.dataType];
             ControllerStarted = false;
         }
@@ -61,43 +63,46 @@ namespace SystematicStrategies
 
         public List<IOptionViewModel> AvailableOptions { get; }
 
-        public DateTime FirstDate { 
-            get { return firstDate; }
+        public DateTime StartDate { 
+            get { return startDate; }
             set
             {
-                if (VerifyDate(value)) SetProperty(ref firstDate, value);
-                else SetProperty(ref firstDate, FirstDate);
+                SetProperty(ref startDate, value);
+                config.startDate = startDate;
                 StartCommand.RaiseCanExecuteChanged();
+                SaveConfigCommand.RaiseCanExecuteChanged();
+
             }
         }
 
-        public DateTime LastDate { 
-            get { return lastDate; }
+        public DateTime EndDate { 
+            get { return endDate; }
             set
             {
-                if (VerifyDate(value)) SetProperty(ref lastDate, value);
-                else SetProperty(ref lastDate, LastDate);
+                SetProperty(ref endDate, value);
+                config.maturity = endDate;
                 StartCommand.RaiseCanExecuteChanged();
+                SaveConfigCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public DateTime FirstDateDisplay
+        /*public DateTime StartDateDisplay
         {
-            get { return firstDateDisplay; }
+            get { return startDateDisplay; }
             set
             {
-                SetProperty(ref firstDateDisplay, value);
+                SetProperty(ref startDateDisplay, value);
             }
         }
 
-        public DateTime LastDateDisplay
+        public DateTime EndDateDisplay
         {
-            get { return lastDateDisplay; }
+            get { return endDateDisplay; }
             set
             {
-                SetProperty(ref lastDateDisplay, value);
+                SetProperty(ref endDateDisplay, value);
             }
-        }
+        }*/
 
         public IDataViewModel DataVM
         {
@@ -105,6 +110,9 @@ namespace SystematicStrategies
             set
             {
                 SetProperty(ref dataVM, value);
+                config.dataType = AvailableDataFeedProviderDic.FirstOrDefault(x => x.Value == dataVM).Key;
+                StartCommand.RaiseCanExecuteChanged();
+                SaveConfigCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -136,6 +144,23 @@ namespace SystematicStrategies
             }
 
         }
+        public string ErrorMessage
+        {
+            get
+            {
+                return errorMessage;
+            }
+
+            set
+            {
+                if (errorMessage != value)
+                {
+                    SetProperty(ref errorMessage, value);
+                }
+
+            }
+
+        }
 
         //public event PropertyChangedEventHandler PropertyChanged;
 
@@ -160,6 +185,7 @@ namespace SystematicStrategies
             {
                 SetProperty(ref controllerStarted, value);
                 StartCommand.RaiseCanExecuteChanged();
+                SaveConfigCommand.RaiseCanExecuteChanged();
                 ResetCommand.RaiseCanExecuteChanged();
             }
         }
@@ -172,12 +198,12 @@ namespace SystematicStrategies
             var type = assembly.GetTypes().First(t => t.Name == config.type);
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { config.name, config.underlyingShares, config.weights, config.maturity, config.strike });
             controller = dataVM.ControllerData;
-            controller.Initialize(optionVM, FirstDate, LastDate, dataVM.DataFeedProvider, 3);
+            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, 3);
             controller.start();
             ControllerStarted = true;
             Result = controller.ResultToString();
-            Result += "\n" + "Date du début : " + FirstDate.ToString();
-            Result += "\n" + "Date de fin : " + LastDate.ToString();
+            Result += "\n" + "Date du début : " + startDate.ToString();
+            Result += "\n" + "Date de fin : " + endDate.ToString();
             ChartVM.maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
         }
 
@@ -190,12 +216,15 @@ namespace SystematicStrategies
 
         private void SaveConfigController()
         {
+            string json = JsonConvert.SerializeObject(config);
+            Console.Write(json);
+            File.WriteAllText(@"Configs\path.json", json);
 
         }
 
         private bool CanStartController()
         {
-            return !controllerStarted & FirstDate < LastDate;
+            return !controllerStarted & VerifyDate();
         }
 
         private bool CanStopController()
@@ -204,15 +233,23 @@ namespace SystematicStrategies
         }
 
 
-        private bool VerifyDate(DateTime date)
+        private bool VerifyDate()
         {
-            DateTime startDate = new DateTime(2009, 12, 14);
-            DateTime endDate = new DateTime(2013, 06, 13);
-            return (date.DayOfWeek != DayOfWeek.Sunday) & (date.DayOfWeek != DayOfWeek.Saturday) & (date >= startDate) & (date <= endDate);
+            DateTime firstDate = new DateTime(2009, 12, 14);
+            DateTime lastDate = new DateTime(2013, 06, 13);
+            DateTime firstDateHistoric = new DateTime(2010, 01, 01);
+            DateTime lastDateHistoric = new DateTime(2015, 08, 20);
+            List<System.DayOfWeek> weekEndDays = new List<System.DayOfWeek>() { DayOfWeek.Sunday, DayOfWeek.Saturday };
+            if(!weekEndDays.Contains(StartDate.DayOfWeek) & !weekEndDays.Contains(EndDate.DayOfWeek) & ((StartDate >= firstDate & EndDate <= lastDate & config.dataType == "SemiHistoricData") | (StartDate >= firstDateHistoric & EndDate <= lastDateHistoric & config.dataType == "HistoricData") | config.dataType == "SimulatedData" ) & StartDate < EndDate)
+            {
+                ErrorMessage = "";
+                return true;
+            }
+            else
+            {
+                ErrorMessage = "Erreur: Dates choisies invalides";
+                return false;
+            }
         }
-
-
-
     }
-
 }
