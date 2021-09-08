@@ -50,9 +50,9 @@ namespace SystematicStrategies.Estimators
             if (res != 0)
             {
                 if (res < 0)
-                    throw new Exception("ERROR: WREanalysisExpostVolatility encountred a problem. See info parameter for more details");
+                    throw new WarningWREException("ERROR: WREanalysisExpostVolatility encountred a problem. See info parameter for more details");
                 else
-                    throw new Exception("WARNING: WREanalysisExpostVolatility encountred a problem. See info parameter for more details");
+                    throw new WarningWREException("WARNING: WREanalysisExpostVolatility encountred a problem. See info parameter for more details");
             }
 
             return volatility[0];

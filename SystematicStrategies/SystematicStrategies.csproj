@@ -132,6 +132,7 @@
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerHistoric.cs" />
     <Compile Include="Estimators\Estimator.cs" />
+    <Compile Include="Exceptions\WarningWREException.cs" />
     <Compile Include="Historique\DataClasses1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -251,9 +251,9 @@ namespace SystematicStrategies
                     ErrorMessage = "Soucis: Taille du jeu de données trop élevée pour afficher un graphe";
                 }
             }
-            catch (Exception e)
+            catch (WarningWREException e)
             {
-                ErrorMessage = e.ToString();
+                ErrorMessage = "La taille de la fenêtre ne permet pas de calculer correctement la matrice de corrélation, veuillez choisir une fenêtre plus grande";
             }
 
         }
