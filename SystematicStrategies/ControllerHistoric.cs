@@ -23,6 +23,7 @@ namespace SystematicStrategies
             Estimator est = new Estimator();
 
             for (int i = 0; i < n; i++) {
+                
                 volatilities[i] = est.Volatity(window, dataFeedProvider.NumberOfDaysPerYear, optionToHedge.UnderlyingShareIds[i]);
             }
             if (n > 1) corMatrix = est.CovMatrix(window, optionToHedge.UnderlyingShareIds, dataFeedProvider.NumberOfDaysPerYear);

@@ -234,18 +234,26 @@ namespace SystematicStrategies
             var type = assembly.GetTypes().First(t => t.Name == (configVM.type + "ViewModel"));
             optionVM = (IOptionViewModel)Activator.CreateInstance(type, new object[5] { configVM.name, configVM.underlyingShares, configVM.weights, EndDate, configVM.strike });
             controller = controllerVM.Controller;
-            controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, windowSizeVM, rebalancingRateVM);
-            controller.Start();
-            ControllerStarted = true;
-            Result = controller.ResultToString();
-            Result += "\n" + "Date du début : " + startDate.ToString();
-            Result += "\n" + "Date de fin : " + endDate.ToString();
-            if (controller.portfolioValues.Count < 10000)
+            try
             {
-                ChartVM.Maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+                controller.Initialize(optionVM, startDate, endDate, dataVM.DataFeedProvider, windowSizeVM, rebalancingRateVM);
+                controller.Start();
+           
+                ControllerStarted = true;
+                Result = controller.ResultToString();
+                Result += "\n" + "Date du début : " + startDate.ToString();
+                Result += "\n" + "Date de fin : " + endDate.ToString();
+                if (controller.portfolioValues.Count < 10000)
+                {
+                    ChartVM.Maj(controller.optionPrices, controller.portfolioValues, controller.dateLabels);
+                }
+                else {
+                    ErrorMessage = "Soucis: Taille du jeu de données trop élevée pour afficher un graphe";
+                }
             }
-            else {
-                ErrorMessage = "Soucis: Taille du jeu de données trop élevée pour afficher un graphe";
+            catch (Exception e)
+            {
+                ErrorMessage = e.ToString();
             }
 
         }

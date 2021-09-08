@@ -20,10 +20,10 @@ namespace SystematicStrategies
         public List<double> optionPrices;
         public List<double> portfolioValues;
         public string[] dateLabels;
-        public double[] volatilities;
-        public double[,] corMatrix;
-        public int windowSize;
-        public DateTime dayOfController;
+        protected double[] volatilities;
+        protected double[,] corMatrix;
+        protected int windowSize;
+        protected DateTime dayOfController;
         private int rebalance;
 
         public void Initialize(IOptionViewModel option, DateTime startDate, DateTime endDate, IDataFeedProvider dataFeedProvider, int expectedWindowSize, int rebalance)
