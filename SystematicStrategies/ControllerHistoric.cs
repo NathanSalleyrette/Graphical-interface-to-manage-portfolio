@@ -27,7 +27,7 @@ namespace SystematicStrategies
             }
             if (n > 1) corMatrix = est.CovMatrix(window, optionToHedge.UnderlyingShareIds, dataFeedProvider.NumberOfDaysPerYear);
             else corMatrix = new double[,] { { volatilities[0]} };
-            est.DispMatrix(corMatrix);
+            //est.DispMatrix(corMatrix);
         }
 
         public List<DataFeed> GetWindow(int numberOfDays, List<DataFeed> globalMarket, DateTime end)
