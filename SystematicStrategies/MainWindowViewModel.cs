@@ -2,23 +2,13 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Prism.Mvvm;
 using Prism.Commands;
-using System.Windows.Controls;
 using PricingLibrary.FinancialProducts;
-using PricingLibrary.Utilities.MarketDataFeed;
-using SystematicStrategies.Strategies;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using SystematicStrategies.ViewModels.DataViewModels;
 using SystematicStrategies.Services;
 using SystematicStrategies.Models;
 using SystematicStrategies.ViewModels;
-using Newtonsoft.Json.Linq;
-using System.IO;
-using Newtonsoft.Json;
 using SystematicStrategies.ViewModels.EstimationViewModels.cs;
 using PricingLibrary.Utilities;
 

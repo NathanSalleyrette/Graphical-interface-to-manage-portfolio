@@ -1,12 +1,4 @@
-﻿using PricingLibrary.FinancialProducts;
-using PricingLibrary.Utilities;
-using PricingLibrary.Utilities.MarketDataFeed;
-using System;
-using System.Collections.Generic;
-using SystematicStrategies.Portfolio;
-using SystematicStrategies.Strategies;
-using SystematicStrategies.ViewModels.DataViewModels;
-
+﻿
 namespace SystematicStrategies
 {
     internal class Controller : AbstractController
